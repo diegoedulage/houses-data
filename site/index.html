@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Greater Manchester Prices &amp; Deprivation</title>
+<title>Manchester &amp; Cheshire Prices</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
 :root {
@@ -74,17 +74,28 @@ th { color: var(--ink-2); font-weight: 600; }
 .salelist { max-height: 260px; overflow: auto; margin-top: 6px; }
 .salelist td:first-child { white-space: normal; }
 .leaflet-container { font: inherit; }
+.sch { margin-top: 10px; }
+.sch h3 { font-size: 13px; margin: 8px 0 4px; }
+.sch-row { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; padding: 5px 0; border-bottom: 1px solid var(--grid); font-size: 12px; }
+.sch-row a { color: var(--ink); text-decoration: none; font-weight: 600; }
+.sch-row a:hover { text-decoration: underline; }
+.grade { display: inline-flex; align-items: center; gap: 5px; }
+.grade i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none; }
+.slegend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11px; color: var(--ink-2); margin-top: 6px; }
+.leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--surface); color: var(--ink); }
+.leaflet-popup-content { font-size: 12px; margin: 10px 12px; }
+.leaflet-popup-content table td { padding: 2px 4px; }
 .leaflet-tooltip { background: var(--surface); color: var(--ink); border: 1px solid var(--border); }
 .leaflet-control-attribution { font-size: 10px; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>Greater Manchester house prices &amp; deprivation</h1>
+  <h1>Greater Manchester &amp; Cheshire house prices and deprivation</h1>
   <p class="sub">Every home sold, matched to its neighbourhood (LSOA) and the English Indices of Deprivation 2025. <span id="period-note"></span></p>
 
   <div class="filters">
-    <label>Borough <select id="f-lad"></select></label>
+    <label>Area <select id="f-lad"></select></label>
     <label>Property type
       <select id="f-type">
         <option value="">All types</option><option value="0">Detached</option><option value="1">Semi-detached</option>
@@ -103,6 +114,10 @@ th { color: var(--ink-2); font-weight: 600; }
         <option value="housing">Barriers to housing</option>
         <option value="environment">Living environment</option>
       </select></label>
+    <label>Schools on map
+      <select id="f-schools">
+        <option value="">Hide</option><option value="P">Primary</option><option value="S">Secondary</option><option value="PS">Primary &amp; secondary</option>
+      </select></label>
   </div>
 
   <div class="tiles" id="tiles"></div>
@@ -112,6 +127,7 @@ th { color: var(--ink-2); font-weight: 600; }
       <div class="row"><h2 id="map-title">Median sold price by neighbourhood</h2><span class="note">Click an area for details</span></div>
       <div id="map" style="margin-top:8px"></div>
       <div class="legend" id="legend"></div>
+      <div class="slegend" id="slegend" hidden></div>
     </div>
     <div class="side">
       <div class="card">
@@ -131,15 +147,17 @@ th { color: var(--ink-2); font-weight: 600; }
   </div>
 
   <p class="note" style="margin-top:16px">Sources: HM Land Registry Price Paid Data (standard residential sales, category A) ·
-    MHCLG English Indices of Deprivation 2025 · ONS Postcode to LSOA lookup (May 2026) · ONS LSOA 2021 boundaries.
+    MHCLG English Indices of Deprivation 2025 · ONS Postcode to LSOA lookup (May 2026) · ONS LSOA 2021 boundaries · Neighbourhood names: House of Commons Library MSOA Names.
     Contains HM Land Registry data © Crown copyright and database right 2026, licensed under the Open Government Licence v3.0.
-    Contains OS data © Crown copyright and database right 2026.</p>
+    Contains OS data © Crown copyright and database right 2026.
+    Schools: DfE Get Information about Schools · Ofsted state-funded schools inspections and outcomes as at 31 August 2026.</p>
 </div>
 <div class="tip" id="tip"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="data.js"></script>
 <script src="boundaries.js"></script>
+<script src="schools.js"></script>
 <script>
 (() => {
 const D = window.GM_DATA, S = D.sales, A = D.areas, N = S.p.length;
@@ -159,8 +177,13 @@ const BLUE = ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", 
 const DECILE = ["#a1262a", "#c43b3b", "#e05f5c", "#ef9590", "#f6c7c2", "#c6dcf6", "#9ec5f4", "#6da7ec", "#2a78d6", "#184f95"];
 
 // ---------- filters
-const lads = [...new Set(A.map(a => a.lad))].sort();
-$("f-lad").innerHTML = `<option value="">All of Greater Manchester</option>` + lads.map(l => `<option>${l}</option>`).join("");
+// Area filter: "" = everything, "region:<name>" = a whole region, otherwise a single local authority.
+const regions = [...new Set(A.map(a => a.region))].sort().reverse(); // Greater Manchester first
+$("f-lad").innerHTML = `<option value="">Greater Manchester &amp; Cheshire</option>`
+  + regions.map(r => `<option value="region:${r}">All of ${r}</option>`).join("")
+  + regions.map(r => `<optgroup label="${r}">${[...new Set(A.filter(a => a.region === r).map(a => a.lad))].sort()
+      .map(l => `<option>${l}</option>`).join("")}</optgroup>`).join("");
+const inScope = a => !state.lad || (state.lad.startsWith("region:") ? a.region === state.lad.slice(7) : a.lad === state.lad);
 const last = dayOf(D.updated);
 const years = [...new Set(S.d.map(d => new Date(EPOCH + d * DAY).getUTCFullYear()))].sort((a, b) => b - a);
 const periods = [
@@ -172,10 +195,11 @@ const periods = [
 $("f-period").innerHTML = periods.map((p, i) => `<option value="${i}">${p.label}</option>`).join("");
 $("period-note").textContent = `Sales from ${fmtDate(0)} to ${fmtDate(last)}.`;
 
-const state = { lad: "", type: "", period: 0, metric: "price", selected: null };
+const state = { lad: "", type: "", period: 0, metric: "price", schools: "", selected: null };
 try { Object.assign(state, JSON.parse(localStorage.getItem("gm-filters") || "{}"), { selected: null }); } catch (e) {}
-$("f-lad").value = state.lad; $("f-type").value = state.type; $("f-period").value = state.period; $("f-metric").value = state.metric;
-for (const [id, key] of [["f-lad", "lad"], ["f-type", "type"], ["f-period", "period"], ["f-metric", "metric"]])
+if (![...$("f-lad").options].some(o => o.value === state.lad)) state.lad = "";
+$("f-lad").value = state.lad; $("f-type").value = state.type; $("f-period").value = state.period; $("f-metric").value = state.metric; $("f-schools").value = state.schools;
+for (const [id, key] of [["f-lad", "lad"], ["f-type", "type"], ["f-period", "period"], ["f-metric", "metric"], ["f-schools", "schools"]])
   $(id).addEventListener("change", e => { state[key] = e.target.value; try { localStorage.setItem("gm-filters", JSON.stringify({ ...state, selected: null })); } catch (er) {} render(); });
 
 // ---------- aggregation
@@ -187,7 +211,7 @@ function aggregate() {
     if (S.d[i] < p.from || S.d[i] > p.to) continue;
     if (type >= 0 && S.t[i] !== type) continue;
     const a = A[S.a[i]];
-    if (state.lad && a.lad !== state.lad) continue;
+    if (!inScope(a)) continue;
     per[S.a[i]].prices.push(S.p[i]); per[S.a[i]].idx.push(i);
   }
   per.forEach(x => { x.median = median(x.prices); });
@@ -224,18 +248,23 @@ const geoLayer = L.geoJSON(window.GM_GEO, {
     layer.on("click", () => selectArea(i, false));
   },
 }).addTo(map);
+// Zoom the map to the areas in the current Area filter.
+function fitScope() {
+  const ls = []; geoLayer.eachLayer(l => { if (inScope(A[l._i])) ls.push(l); });
+  map.fitBounds((ls.length ? L.featureGroup(ls) : geoLayer).getBounds(), { padding: [6, 6] });
+}
 map.fitBounds(geoLayer.getBounds(), { padding: [6, 6] });
 // If the page first lays out while hidden or zero-sized, refit once it has a real size.
 let fitted = $("map").offsetWidth > 0;
 new ResizeObserver(() => {
   map.invalidateSize();
-  if (!fitted && $("map").offsetWidth > 0) { fitted = true; map.fitBounds(geoLayer.getBounds(), { padding: [6, 6] }); }
+  if (!fitted && $("map").offsetWidth > 0) { fitted = true; fitScope(); }
 }).observe($("map"));
 
 let breaks = [];
 function colorFor(i) {
   const a = A[i];
-  if (state.lad && a.lad !== state.lad) return null;
+  if (!inScope(a)) return null;
   if (state.metric === "price") {
     const m = agg[i].median; if (m == null) return "transparent";
     let b = 0; while (b < breaks.length && m >= breaks[b]) b++; return BLUE[b];
@@ -254,14 +283,15 @@ const METRIC_LABEL = { price: "Median sold price", imd: "Overall deprivation dec
   crime: "Crime deprivation decile", housing: "Barriers to housing decile", environment: "Living environment decile" };
 function tipArea(i) {
   const a = A[i], g = agg[i];
-  return `<div><b>${a.name}</b> · ${a.lad}</div>
+  return `<div><b>${a.hood || a.name}</b></div><div class="note">${a.hood ? a.name + " · " : ""}${a.lad}</div>
     <div>Median price: <b>${gbp(g.median)}</b> (${g.prices.length} sale${g.prices.length === 1 ? "" : "s"})</div>
     <div>IMD decile: <b>${a.imd}</b> · rank ${a.rank.toLocaleString("en-GB")}</div>`;
 }
 function renderLegend() {
   const L = $("legend");
   if (state.metric === "price") {
-    const lab = [`< ${gbpK(breaks[0])}`, ...breaks.slice(0, -1).map((b, k) => `${gbpK(b)}–${gbpK(breaks[k + 1])}`), `${gbpK(breaks[breaks.length - 1])}+`];
+    // Each band labelled by its lower bound: short enough to fit on a phone.
+    const lab = [`<${gbpK(breaks[0])}`, ...breaks.slice(0, -1).map(b => gbpK(b)), `${gbpK(breaks[breaks.length - 1])}+`];
     L.innerHTML = BLUE.map((c, k) => `<div class="sw"><i style="background:${c}"></i><span>${lab[k]}</span></div>`).join("")
       + `<div class="sw" style="flex:0 0 auto;margin-left:8px"><span>No sales: blank</span></div>`;
   } else {
@@ -275,7 +305,7 @@ function renderTiles() {
   const all = [], byDec = Array.from({ length: 10 }, () => []);
   agg.forEach((g, i) => { for (const p of g.prices) { all.push(p); byDec[A[i].imd - 1].push(p); } });
   const m1 = median(byDec[0]), m10 = median(byDec[9]);
-  const areasInScope = A.filter(a => !state.lad || a.lad === state.lad);
+  const areasInScope = A.filter(inScope);
   const share = areasInScope.filter(a => a.imd === 1).length / areasInScope.length;
   $("tiles").innerHTML = [
     ["Homes sold", all.length.toLocaleString("en-GB"), periods[+state.period].label],
@@ -369,13 +399,15 @@ function renderArea() {
   if (i == null) { box.innerHTML = `<h2>Neighbourhood</h2><p class="empty">Select an area on the map or a dot in the chart.</p>`; return; }
   const a = A[i], g = agg[i];
   const typeCount = [0, 0, 0, 0, 0]; g.idx.forEach(k => typeCount[S.t[k]]++);
-  box.innerHTML = `<div class="row"><h2>${a.name}</h2><button class="link" id="clear-area">Clear</button></div>
-    <div class="note">${a.lad} · ${a.code} · IMD rank ${a.rank.toLocaleString("en-GB")} of 33,755</div>
+  box.innerHTML = `<div class="row"><h2>${a.hood || a.name}</h2><button class="link" id="clear-area">Clear</button></div>
+    <div class="note">${a.name} · ${a.lad} · ${a.code} · IMD rank ${a.rank.toLocaleString("en-GB")} of 33,755</div>
     <div class="row" style="margin-top:8px"><div><div class="note">Median price</div><div style="font-size:20px;font-weight:600">${gbp(g.median)}</div></div>
       <div style="text-align:right"><div class="note">Sales in period</div><div style="font-size:20px;font-weight:600">${g.prices.length}</div></div></div>
     <div class="note">${typeCount.map((c, k) => c ? `${TYPE_NAMES[k]} ${c}` : "").filter(Boolean).join(" · ") || "No sales for this selection"}</div>
     <div class="deciles">${DOM_ROWS.map(([k, label]) => `<span>${label}</span><span class="dbar" title="Decile ${a[k]}">${Array.from({ length: 10 }, (_, d) => `<i style="${d < a[k] ? `background:${DECILE[a[k] - 1]}` : ""}"></i>`).join("")}<b style="margin-left:4px;width:16px;text-align:right">${a[k]}</b></span>`).join("")}</div>
     <div class="note">Deciles: 1 = most deprived 10% in England</div>
+    ${schoolsHtml(a)}
+    <h3 style="font-size:13px;margin:12px 0 0">Sales</h3>
     <div class="salelist" id="salelist"><p class="note">Loading sales…</p></div>`;
   $("clear-area").onclick = () => { state.selected = null; geoLayer.eachLayer(styleLayer); renderArea(); renderScatter(); };
   loadAddresses().then(() => {
@@ -385,9 +417,67 @@ function renderArea() {
   }).catch(() => { $("salelist").innerHTML = `<p class="note">Couldn't load addresses.js.</p>`; });
 }
 
+// ---------- schools
+const SC = window.GM_SCHOOLS || [];
+const GRADE = [ // shared colour category across Ofsted's old and report-card scales; labels always shown
+  { label: "Not graded", color: "#898781" },
+  { label: "Outstanding · Exceptional", color: "#0a6e0a" },
+  { label: "Good · Strong standard", color: "#2fa83a" },
+  { label: "Expected standard", color: "#9db59a" },
+  { label: "Requires improvement · Needs attention", color: "#ec835a" },
+  { label: "Inadequate · Urgent improvement", color: "#d03b3b" },
+];
+const PHASE = { P: "Primary", S: "Secondary" };
+const ofstedUrl = s => `https://reports.ofsted.gov.uk/provider/21/${s.urn}`;
+const fmtISO = d => d ? new Date(d).toLocaleDateString("en-GB", { month: "short", year: "numeric" }) : "";
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const gradeHtml = s => `<span class="grade"><i style="background:${GRADE[s.cat].color}"></i>${esc(s.head || "Not yet inspected")}</span>`;
+const km = m => m < 1000 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000).toFixed(1)} km`;
+map.createPane("schools").style.zIndex = 450;
+const schoolLayer = L.layerGroup().addTo(map);
+const schoolMarkers = SC.map((s, j) => {
+  const m = L.circleMarker([s.lat, s.lon], { pane: "schools", radius: s.phase === "S" ? 7 : 5, weight: s.phase === "S" ? 2.5 : 1.5,
+    color: "#ffffff", fillColor: GRADE[s.cat].color, fillOpacity: 1 });
+  m.bindTooltip(() => `<b>${esc(s.name)}</b><div class="note">${PHASE[s.phase]} · ${esc(s.type)}</div>${gradeHtml(s)}${s.date ? ` <span class="note">(${fmtISO(s.date)})</span>` : ""}`, { direction: "top", offset: [0, -6] });
+  m.bindPopup(() => schoolPopup(s));
+  return m;
+});
+function schoolPopup(s) {
+  return `<b>${esc(s.name)}</b><div class="note">${PHASE[s.phase]} · ${esc(s.type)}${s.pupils ? ` · ${s.pupils.toLocaleString("en-GB")} pupils` : ""}${s.faith ? ` · ${esc(s.faith)}` : ""}</div>
+    <div style="margin:6px 0">${gradeHtml(s)}</div>
+    <div class="note">${s.scheme ? `${esc(s.scheme)}, ${fmtISO(s.date)}` : "No inspection on record"}</div>
+    ${s.grades.length ? `<table>${s.grades.map(([k, v]) => `<tr><td>${esc(k)}</td><td><b>${esc(v)}</b></td></tr>`).join("")}</table>` : ""}
+    ${s.later ? `<div class="note">Later ungraded visit (${fmtISO(s.later[0])}): ${esc(s.later[1])}</div>` : ""}
+    <div style="margin-top:6px"><a href="${ofstedUrl(s)}" target="_blank" rel="noopener">Ofsted reports ↗</a></div>`;
+}
+function renderSchools() {
+  schoolLayer.clearLayers();
+  $("slegend").hidden = !state.schools;
+  if (!state.schools) return;
+  SC.forEach((s, j) => { if (state.schools.includes(s.phase)) schoolLayer.addLayer(schoolMarkers[j]); });
+  $("slegend").innerHTML = `<b>Schools:</b>` + GRADE.slice(1).concat(GRADE[0]).map(g => `<span class="grade"><i style="background:${g.color}"></i>${g.label}</span>`).join("")
+    + `<span>Small dot = primary, large = secondary</span>`;
+}
+function schoolsHtml(a) {
+  if (!a.sch || !a.sch.length) return "";
+  const block = ph => a.sch.filter(([j]) => SC[j].phase === ph).map(([j, d]) => { const s = SC[j];
+    return `<div class="sch-row"><a href="#" data-school="${j}">${esc(s.name)}</a><span class="note">${km(d)}</span>
+      <span>${gradeHtml(s)}</span><span class="note">${fmtISO(s.date)}</span></div>`; }).join("");
+  return `<div class="sch"><h3 style="font-size:13px;margin:12px 0 0">Nearest schools</h3>
+    <div class="note">Straight-line distance from the area's centre. Not official catchment areas: check the council's admissions criteria.</div>
+    <h3>Primary</h3>${block("P")}<h3>Secondary</h3>${block("S")}</div>`;
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-school]"); if (!t) return;
+  e.preventDefault(); const s = SC[+t.dataset.school], m = schoolMarkers[+t.dataset.school];
+  if (!schoolLayer.hasLayer(m)) schoolLayer.addLayer(m);
+  map.setView([s.lat, s.lon], Math.max(map.getZoom(), 14)); m.openPopup();
+});
+
 // ---------- render
+let lastLad = null;
 function render() {
-  if (state.selected != null && state.lad && A[state.selected].lad !== state.lad) state.selected = null;
+  if (state.selected != null && !inScope(A[state.selected])) state.selected = null;
   agg = aggregate();
   const meds = agg.map(g => g.median).filter(m => m != null).sort((a, b) => a - b);
   // 7 quantile bands, rounded to £5k and kept strictly increasing so no band repeats.
@@ -398,8 +488,8 @@ function render() {
     breaks.push(v);
   }
   geoLayer.eachLayer(styleLayer);
-  if (state.lad) { const ls = []; geoLayer.eachLayer(l => { if (A[l._i].lad === state.lad) ls.push(l); }); if (ls.length) map.fitBounds(L.featureGroup(ls).getBounds(), { padding: [6, 6] }); }
-  renderLegend(); renderTiles(); renderBars(); renderScatter(); renderArea();
+  if (state.lad !== lastLad) { lastLad = state.lad; fitScope(); }
+  renderLegend(); renderSchools(); renderTiles(); renderBars(); renderScatter(); renderArea();
 }
 render();
 })();
