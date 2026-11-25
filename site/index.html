@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Greater Manchester Prices &amp; Deprivation</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10); --accent: #2a78d6;
+  --hover: rgba(11,11,11,0.05);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --accent: #3987e5;
+    --hover: rgba(255,255,255,0.06);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --accent: #3987e5;
+  --hover: rgba(255,255,255,0.06);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 20px 16px 40px; }
+h1 { font-size: 22px; margin: 0 0 4px; letter-spacing: -0.01em; }
+h2 { font-size: 15px; margin: 0 0 2px; }
+.sub { color: var(--ink-2); margin: 0 0 16px; }
+.note { color: var(--muted); font-size: 12px; }
+.filters { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; margin-bottom: 14px; }
+.filters label { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--ink-2); }
+select { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 28px 6px 10px; min-width: 150px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.tile, .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+.tile { padding: 12px 14px; }
+.tile .k { font-size: 12px; color: var(--ink-2); }
+.tile .v { font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; margin-top: 2px; }
+.tile .s { font-size: 12px; color: var(--muted); }
+.main { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 14px; }
+@media (max-width: 900px) { .main { grid-template-columns: 1fr; } }
+.card { padding: 14px; min-width: 0; }
+#map { height: 560px; border-radius: 8px; background: var(--page); }
+@media (max-width: 600px) { #map { height: 420px; } }
+.legend { display: flex; align-items: center; gap: 0; margin-top: 8px; flex-wrap: wrap; font-size: 11px; color: var(--ink-2); }
+.legend .sw { display: flex; flex-direction: column; align-items: center; min-width: 38px; flex: 1; }
+.legend .sw i { display: block; height: 10px; width: 100%; border-right: 2px solid var(--surface); }
+.legend .sw span { margin-top: 3px; white-space: nowrap; }
+.side { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.chart { position: relative; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart text { fill: var(--muted); font-size: 11px; }
+.tip { position: fixed; pointer-events: none; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font-size: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12); display: none; z-index: 2000; max-width: 260px; }
+.tip b { font-variant-numeric: tabular-nums; }
+.row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.link { background: none; border: 0; color: var(--accent); font: inherit; font-size: 12px; cursor: pointer; padding: 0; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 4px 6px; border-bottom: 1px solid var(--grid); }
+th:first-child, td:first-child { text-align: left; }
+th { color: var(--ink-2); font-weight: 600; }
+#area .empty { color: var(--muted); }
+.deciles { display: grid; grid-template-columns: 1fr auto; gap: 3px 10px; font-size: 12px; margin: 8px 0; }
+.dbar { display: flex; gap: 2px; align-items: center; }
+.dbar i { width: 9px; height: 9px; border-radius: 2px; background: var(--grid); }
+.salelist { max-height: 260px; overflow: auto; margin-top: 6px; }
+.salelist td:first-child { white-space: normal; }
+.leaflet-container { font: inherit; }
+.leaflet-tooltip { background: var(--surface); color: var(--ink); border: 1px solid var(--border); }
+.leaflet-control-attribution { font-size: 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Greater Manchester house prices &amp; deprivation</h1>
+  <p class="sub">Every home sold, matched to its neighbourhood (LSOA) and the English Indices of Deprivation 2025. <span id="period-note"></span></p>
+
+  <div class="filters">
+    <label>Borough <select id="f-lad"></select></label>
+    <label>Property type
+      <select id="f-type">
+        <option value="">All types</option><option value="0">Detached</option><option value="1">Semi-detached</option>
+        <option value="2">Terraced</option><option value="3">Flat / maisonette</option>
+      </select></label>
+    <label>Period <select id="f-period"></select></label>
+    <label>Colour map by
+      <select id="f-metric">
+        <option value="price">Median sold price</option>
+        <option value="imd">Overall deprivation (IMD)</option>
+        <option value="income">Income deprivation</option>
+        <option value="employment">Employment deprivation</option>
+        <option value="education">Education &amp; skills</option>
+        <option value="health">Health &amp; disability</option>
+        <option value="crime">Crime</option>
+        <option value="housing">Barriers to housing</option>
+        <option value="environment">Living environment</option>
+      </select></label>
+  </div>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div class="main">
+    <div class="card">
+      <div class="row"><h2 id="map-title">Median sold price by neighbourhood</h2><span class="note">Click an area for details</span></div>
+      <div id="map" style="margin-top:8px"></div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="side">
+      <div class="card">
+        <div class="row"><h2>Median price by deprivation decile</h2><button class="link" id="toggle-table">Show table</button></div>
+        <div class="note">1 = most deprived 10% of England, 10 = least deprived</div>
+        <div class="chart" id="bars"></div>
+        <div id="bars-table" hidden></div>
+      </div>
+      <div class="card" id="area"><h2>Neighbourhood</h2><p class="empty">Select an area on the map.</p></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2>Each neighbourhood: deprivation rank vs median price</h2>
+    <div class="note">One dot per LSOA with at least 3 sales in the period. Rank 1 is the most deprived of England's 33,755 areas. Price on a log scale.</div>
+    <div class="chart" id="scatter"></div>
+  </div>
+
+  <p class="note" style="margin-top:16px">Sources: HM Land Registry Price Paid Data (standard residential sales, category A) ·
+    MHCLG English Indices of Deprivation 2025 · ONS Postcode to LSOA lookup (May 2026) · ONS LSOA 2021 boundaries.
+    Contains HM Land Registry data © Crown copyright and database right 2026, licensed under the Open Government Licence v3.0.
+    Contains OS data © Crown copyright and database right 2026.</p>
+</div>
+<div class="tip" id="tip"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="data.js"></script>
+<script src="boundaries.js"></script>
+<script>
+(() => {
+const D = window.GM_DATA, S = D.sales, A = D.areas, N = S.p.length;
+const TYPE_NAMES = ["Detached", "Semi-detached", "Terraced", "Flat", "Other"];
+const EPOCH = Date.UTC(2023, 0, 1), DAY = 864e5;
+const dayOf = s => Math.round((Date.parse(s) - EPOCH) / DAY);
+const fmtDate = d => new Date(EPOCH + d * DAY).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+const gbp = v => v == null ? "–" : "£" + Math.round(v).toLocaleString("en-GB");
+const gbpK = v => v === 0 ? "£0" : v >= 1e6 ? "£" + (v / 1e6).toFixed(v >= 1e7 ? 0 : 1) + "m" : "£" + Math.round(v / 1e3) + "k";
+const median = arr => { if (!arr.length) return null; const s = Float64Array.from(arr).sort(); const m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+const $ = id => document.getElementById(id);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const dark = () => matchMedia("(prefers-color-scheme: dark)").matches && document.documentElement.dataset.theme !== "light" || document.documentElement.dataset.theme === "dark";
+
+// ---------- colour scales (sequential blue for price; red<->blue diverging for deciles)
+const BLUE = ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"];
+const DECILE = ["#a1262a", "#c43b3b", "#e05f5c", "#ef9590", "#f6c7c2", "#c6dcf6", "#9ec5f4", "#6da7ec", "#2a78d6", "#184f95"];
+
+// ---------- filters
+const lads = [...new Set(A.map(a => a.lad))].sort();
+$("f-lad").innerHTML = `<option value="">All of Greater Manchester</option>` + lads.map(l => `<option>${l}</option>`).join("");
+const last = dayOf(D.updated);
+const years = [...new Set(S.d.map(d => new Date(EPOCH + d * DAY).getUTCFullYear()))].sort((a, b) => b - a);
+const periods = [
+  { label: "Last 12 months", from: last - 364, to: last },
+  { label: "Last 3 years", from: last - 3 * 365 + 1, to: last },
+  ...years.map(y => ({ label: String(y) + (y === years[0] ? " (to date)" : ""), from: dayOf(`${y}-01-01`), to: dayOf(`${y}-12-31`) })),
+  { label: "All (" + years[years.length - 1] + "–" + years[0] + ")", from: 0, to: last },
+];
+$("f-period").innerHTML = periods.map((p, i) => `<option value="${i}">${p.label}</option>`).join("");
+$("period-note").textContent = `Sales from ${fmtDate(0)} to ${fmtDate(last)}.`;
+
+const state = { lad: "", type: "", period: 0, metric: "price", selected: null };
+try { Object.assign(state, JSON.parse(localStorage.getItem("gm-filters") || "{}"), { selected: null }); } catch (e) {}
+$("f-lad").value = state.lad; $("f-type").value = state.type; $("f-period").value = state.period; $("f-metric").value = state.metric;
+for (const [id, key] of [["f-lad", "lad"], ["f-type", "type"], ["f-period", "period"], ["f-metric", "metric"]])
+  $(id).addEventListener("change", e => { state[key] = e.target.value; try { localStorage.setItem("gm-filters", JSON.stringify({ ...state, selected: null })); } catch (er) {} render(); });
+
+// ---------- aggregation
+let agg; // per area: {prices:[], idx:[]}
+function aggregate() {
+  const p = periods[+state.period] || periods[0], type = state.type === "" ? -1 : +state.type;
+  const per = A.map(() => ({ prices: [], idx: [] }));
+  for (let i = 0; i < N; i++) {
+    if (S.d[i] < p.from || S.d[i] > p.to) continue;
+    if (type >= 0 && S.t[i] !== type) continue;
+    const a = A[S.a[i]];
+    if (state.lad && a.lad !== state.lad) continue;
+    per[S.a[i]].prices.push(S.p[i]); per[S.a[i]].idx.push(i);
+  }
+  per.forEach(x => { x.median = median(x.prices); });
+  return per;
+}
+
+// ---------- tooltip
+const tip = $("tip");
+function showTip(html, ev) { tip.innerHTML = html; tip.style.display = "block";
+  const w = tip.offsetWidth, h = tip.offsetHeight; let x = ev.clientX + 14, y = ev.clientY + 14;
+  if (x + w > innerWidth - 8) x = ev.clientX - w - 14; if (y + h > innerHeight - 8) y = ev.clientY - h - 14;
+  tip.style.left = x + "px"; tip.style.top = y + "px"; }
+const hideTip = () => tip.style.display = "none";
+
+// ---------- map
+const map = L.map("map", { preferCanvas: false, zoomSnap: 0.25 });
+let tiles;
+function setTiles() {
+  if (tiles) map.removeLayer(tiles);
+  tiles = L.tileLayer(`https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_${dark() ? "Dark" : "Light"}_Gray_Base/MapServer/tile/{z}/{y}/{x}`, {
+    attribution: "Basemap &copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors", maxZoom: 16 }).addTo(map);
+}
+setTiles();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { setTiles(); render(); });
+const codeIdx = Object.fromEntries(A.map((a, i) => [a.code, i]));
+const geoLayer = L.geoJSON(window.GM_GEO, {
+  style: () => ({ weight: 0.5, color: "#ffffff", fillOpacity: 0.8 }),
+  onEachFeature: (f, layer) => {
+    const i = codeIdx[f.properties.code]; layer._i = i;
+    // No bringToFront() on hover: moving the element in the DOM swallows the click.
+    layer.on("mouseover", e => { layer.setStyle({ weight: 2, color: css("--ink") }); showTip(tipArea(i), e.originalEvent); });
+    layer.on("mousemove", e => showTip(tipArea(i), e.originalEvent));
+    layer.on("mouseout", () => { hideTip(); styleLayer(layer); });
+    layer.on("click", () => selectArea(i, false));
+  },
+}).addTo(map);
+map.fitBounds(geoLayer.getBounds(), { padding: [6, 6] });
+// If the page first lays out while hidden or zero-sized, refit once it has a real size.
+let fitted = $("map").offsetWidth > 0;
+new ResizeObserver(() => {
+  map.invalidateSize();
+  if (!fitted && $("map").offsetWidth > 0) { fitted = true; map.fitBounds(geoLayer.getBounds(), { padding: [6, 6] }); }
+}).observe($("map"));
+
+let breaks = [];
+function colorFor(i) {
+  const a = A[i];
+  if (state.lad && a.lad !== state.lad) return null;
+  if (state.metric === "price") {
+    const m = agg[i].median; if (m == null) return "transparent";
+    let b = 0; while (b < breaks.length && m >= breaks[b]) b++; return BLUE[b];
+  }
+  return DECILE[a[state.metric] - 1];
+}
+function styleLayer(layer) {
+  const i = layer._i, c = colorFor(i), sel = i === state.selected;
+  if (c === null) return layer.setStyle({ fillOpacity: 0.08, fillColor: css("--muted"), weight: 0.3, color: css("--surface") });
+  layer.setStyle({ fillColor: c, fillOpacity: c === "transparent" ? 0 : 0.82,
+    weight: sel ? 2.5 : 0.4, color: sel ? css("--ink") : css("--surface") });
+  if (sel) layer.bringToFront();
+}
+const METRIC_LABEL = { price: "Median sold price", imd: "Overall deprivation decile (IMD)", income: "Income deprivation decile",
+  employment: "Employment deprivation decile", education: "Education & skills deprivation decile", health: "Health & disability deprivation decile",
+  crime: "Crime deprivation decile", housing: "Barriers to housing decile", environment: "Living environment decile" };
+function tipArea(i) {
+  const a = A[i], g = agg[i];
+  return `<div><b>${a.name}</b> · ${a.lad}</div>
+    <div>Median price: <b>${gbp(g.median)}</b> (${g.prices.length} sale${g.prices.length === 1 ? "" : "s"})</div>
+    <div>IMD decile: <b>${a.imd}</b> · rank ${a.rank.toLocaleString("en-GB")}</div>`;
+}
+function renderLegend() {
+  const L = $("legend");
+  if (state.metric === "price") {
+    const lab = [`< ${gbpK(breaks[0])}`, ...breaks.slice(0, -1).map((b, k) => `${gbpK(b)}–${gbpK(breaks[k + 1])}`), `${gbpK(breaks[breaks.length - 1])}+`];
+    L.innerHTML = BLUE.map((c, k) => `<div class="sw"><i style="background:${c}"></i><span>${lab[k]}</span></div>`).join("")
+      + `<div class="sw" style="flex:0 0 auto;margin-left:8px"><span>No sales: blank</span></div>`;
+  } else {
+    L.innerHTML = DECILE.map((c, k) => `<div class="sw"><i style="background:${c}"></i><span>${k === 0 ? "1 most" : k === 9 ? "10 least" : k + 1}</span></div>`).join("");
+  }
+  $("map-title").textContent = METRIC_LABEL[state.metric] + " by neighbourhood";
+}
+
+// ---------- tiles
+function renderTiles() {
+  const all = [], byDec = Array.from({ length: 10 }, () => []);
+  agg.forEach((g, i) => { for (const p of g.prices) { all.push(p); byDec[A[i].imd - 1].push(p); } });
+  const m1 = median(byDec[0]), m10 = median(byDec[9]);
+  const areasInScope = A.filter(a => !state.lad || a.lad === state.lad);
+  const share = areasInScope.filter(a => a.imd === 1).length / areasInScope.length;
+  $("tiles").innerHTML = [
+    ["Homes sold", all.length.toLocaleString("en-GB"), periods[+state.period].label],
+    ["Median sold price", gbp(median(all)), state.type === "" ? "All property types" : TYPE_NAMES[+state.type]],
+    ["In most deprived 10%", gbp(m1), `${byDec[0].length.toLocaleString("en-GB")} sales · median`],
+    ["In least deprived 10%", gbp(m10), `${byDec[9].length.toLocaleString("en-GB")} sales · median`],
+    ["Areas in England's most deprived 10%", Math.round(share * 100) + "%", `${areasInScope.length.toLocaleString("en-GB")} neighbourhoods in view`],
+  ].map(([k, v, s]) => `<div class="tile"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join("");
+}
+
+// ---------- bar chart: median price by IMD decile
+const SVGNS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent) { const e = document.createElementNS(SVGNS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; }
+function niceMax(v) { const p = 10 ** Math.floor(Math.log10(v)); for (const m of [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10]) if (m * p >= v) return m * p; }
+function renderBars() {
+  const byDec = Array.from({ length: 10 }, () => []);
+  agg.forEach((g, i) => { for (const p of g.prices) byDec[A[i].imd - 1].push(p); });
+  const rows = byDec.map((ps, k) => ({ d: k + 1, m: median(ps), n: ps.length }));
+  const W = 420, H = 230, ml = 44, mr = 6, mt = 10, mb = 26, iw = W - ml - mr, ih = H - mt - mb;
+  const max = niceMax(Math.max(1, ...rows.map(r => r.m || 0)));
+  const box = $("bars"); box.innerHTML = "";
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Median sold price for each deprivation decile" }, box);
+  for (let t = 0; t <= 4; t++) {
+    const y = mt + ih - (ih * t) / 4;
+    el("line", { x1: ml, x2: W - mr, y1: y, y2: y, stroke: t ? css("--grid") : css("--axis"), "stroke-width": 1 }, svg);
+    el("text", { x: ml - 6, y: y + 4, "text-anchor": "end" }, svg).textContent = gbpK(max * t / 4);
+  }
+  const bw = iw / 10, barW = Math.min(26, bw - 6);
+  rows.forEach((r, k) => {
+    const x = ml + bw * k + (bw - barW) / 2;
+    el("text", { x: x + barW / 2, y: H - 8, "text-anchor": "middle" }, svg).textContent = r.d;
+    if (r.m != null) {
+      const h = (r.m / max) * ih, y = mt + ih - h, rr = Math.min(4, h / 2);
+      el("path", { d: `M${x},${mt + ih} V${y + rr} Q${x},${y} ${x + rr},${y} H${x + barW - rr} Q${x + barW},${y} ${x + barW},${y + rr} V${mt + ih} Z`, fill: DECILE[k] }, svg);
+    }
+    const hit = el("rect", { x: ml + bw * k, y: mt, width: bw, height: ih, fill: "transparent" }, svg);
+    hit.addEventListener("mousemove", e => { hit.setAttribute("fill", css("--hover")); showTip(`<div>Decile <b>${r.d}</b>${r.d === 1 ? " (most deprived)" : r.d === 10 ? " (least deprived)" : ""}</div><div>Median: <b>${gbp(r.m)}</b></div><div>${r.n.toLocaleString("en-GB")} sales</div>`, e); });
+    hit.addEventListener("mouseleave", () => { hit.setAttribute("fill", "transparent"); hideTip(); });
+  });
+  $("bars-table").innerHTML = `<table><tr><th>Decile</th><th>Median price</th><th>Sales</th></tr>${rows.map(r => `<tr><td>${r.d}</td><td>${gbp(r.m)}</td><td>${r.n.toLocaleString("en-GB")}</td></tr>`).join("")}</table>`;
+}
+$("toggle-table").addEventListener("click", e => { const t = $("bars-table"); t.hidden = !t.hidden; e.target.textContent = t.hidden ? "Show table" : "Hide table"; });
+
+// ---------- scatter: IMD rank vs median price
+function renderScatter() {
+  const pts = agg.map((g, i) => ({ i, a: A[i], m: g.median, n: g.prices.length })).filter(p => p.m != null && p.n >= 3);
+  const box = $("scatter"); box.innerHTML = "";
+  const W = 1200, H = 340, ml = 52, mr = 10, mt = 12, mb = 34, iw = W - ml - mr, ih = H - mt - mb;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Scatter of deprivation rank against median price" }, box);
+  if (!pts.length) { el("text", { x: W / 2, y: H / 2, "text-anchor": "middle" }, svg).textContent = "No areas with 3+ sales for this selection"; return; }
+  const lo = Math.log10(Math.max(20000, Math.min(...pts.map(p => p.m)) * 0.9)), hi = Math.log10(Math.max(...pts.map(p => p.m)) * 1.1);
+  const X = r => ml + (r / 33755) * iw, Y = v => mt + ih - ((Math.log10(v) - lo) / (hi - lo)) * ih;
+  for (const v of [5e4, 75e3, 1e5, 15e4, 2e5, 3e5, 5e5, 75e4, 1e6, 15e5, 2e6, 3e6]) {
+    if (Math.log10(v) < lo || Math.log10(v) > hi) continue;
+    el("line", { x1: ml, x2: W - mr, y1: Y(v), y2: Y(v), stroke: css("--grid") }, svg);
+    el("text", { x: ml - 6, y: Y(v) + 4, "text-anchor": "end" }, svg).textContent = gbpK(v);
+  }
+  el("line", { x1: ml, x2: W - mr, y1: mt + ih, y2: mt + ih, stroke: css("--axis") }, svg);
+  for (let d = 0; d <= 10; d++) {
+    const x = X(d * 3375.5);
+    el("line", { x1: x, x2: x, y1: mt + ih, y2: mt + ih + 4, stroke: css("--axis") }, svg);
+    if (d < 10) el("text", { x: X((d + 0.5) * 3375.5), y: H - 14, "text-anchor": "middle" }, svg).textContent = `D${d + 1}`;
+  }
+  el("text", { x: ml, y: H - 1 }, svg).textContent = "← more deprived";
+  el("text", { x: W - mr, y: H - 1, "text-anchor": "end" }, svg).textContent = "less deprived →";
+  const ring = css("--surface");
+  pts.forEach(p => {
+    const c = el("circle", { cx: X(p.a.rank), cy: Y(p.m), r: 4, fill: DECILE[p.a.imd - 1], stroke: ring, "stroke-width": 1, "fill-opacity": 0.9 }, svg);
+    if (p.i === state.selected) { c.setAttribute("r", 7); c.setAttribute("stroke", css("--ink")); c.setAttribute("stroke-width", 2); }
+    c.style.cursor = "pointer";
+    c.addEventListener("mousemove", e => { c.setAttribute("r", 7); showTip(tipArea(p.i), e); });
+    c.addEventListener("mouseleave", () => { if (p.i !== state.selected) c.setAttribute("r", 4); hideTip(); });
+    c.addEventListener("click", () => selectArea(p.i, true));
+  });
+}
+
+// ---------- area panel
+let addrLoading = null;
+function loadAddresses() {
+  if (window.GM_ADDR) return Promise.resolve();
+  return addrLoading ||= new Promise((res, rej) => { const s = document.createElement("script"); s.src = "addresses.js"; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+}
+const DOM_ROWS = [["imd", "Overall (IMD)"], ["income", "Income"], ["employment", "Employment"], ["education", "Education & skills"],
+  ["health", "Health & disability"], ["crime", "Crime"], ["housing", "Barriers to housing"], ["environment", "Living environment"]];
+function selectArea(i, pan) {
+  state.selected = i; geoLayer.eachLayer(l => { styleLayer(l); if (pan && l._i === i) map.fitBounds(l.getBounds(), { maxZoom: 15 }); });
+  renderArea(); renderScatter();
+}
+function renderArea() {
+  const i = state.selected, box = $("area");
+  if (i == null) { box.innerHTML = `<h2>Neighbourhood</h2><p class="empty">Select an area on the map or a dot in the chart.</p>`; return; }
+  const a = A[i], g = agg[i];
+  const typeCount = [0, 0, 0, 0, 0]; g.idx.forEach(k => typeCount[S.t[k]]++);
+  box.innerHTML = `<div class="row"><h2>${a.name}</h2><button class="link" id="clear-area">Clear</button></div>
+    <div class="note">${a.lad} · ${a.code} · IMD rank ${a.rank.toLocaleString("en-GB")} of 33,755</div>
+    <div class="row" style="margin-top:8px"><div><div class="note">Median price</div><div style="font-size:20px;font-weight:600">${gbp(g.median)}</div></div>
+      <div style="text-align:right"><div class="note">Sales in period</div><div style="font-size:20px;font-weight:600">${g.prices.length}</div></div></div>
+    <div class="note">${typeCount.map((c, k) => c ? `${TYPE_NAMES[k]} ${c}` : "").filter(Boolean).join(" · ") || "No sales for this selection"}</div>
+    <div class="deciles">${DOM_ROWS.map(([k, label]) => `<span>${label}</span><span class="dbar" title="Decile ${a[k]}">${Array.from({ length: 10 }, (_, d) => `<i style="${d < a[k] ? `background:${DECILE[a[k] - 1]}` : ""}"></i>`).join("")}<b style="margin-left:4px;width:16px;text-align:right">${a[k]}</b></span>`).join("")}</div>
+    <div class="note">Deciles: 1 = most deprived 10% in England</div>
+    <div class="salelist" id="salelist"><p class="note">Loading sales…</p></div>`;
+  $("clear-area").onclick = () => { state.selected = null; geoLayer.eachLayer(styleLayer); renderArea(); renderScatter(); };
+  loadAddresses().then(() => {
+    if (state.selected !== i) return;
+    const rows = g.idx.slice().sort((x, y) => S.d[y] - S.d[x]);
+    $("salelist").innerHTML = rows.length ? `<table><tr><th>Address</th><th>Type</th><th>Date</th><th>Price</th></tr>${rows.map(k => `<tr><td>${window.GM_ADDR[k]}${S.n[k] ? " <span class='note'>(new)</span>" : ""}</td><td>${TYPE_NAMES[S.t[k]]}</td><td style="white-space:nowrap">${fmtDate(S.d[k])}</td><td>${gbp(S.p[k])}</td></tr>`).join("")}</table>` : `<p class="note">No sales match the filters.</p>`;
+  }).catch(() => { $("salelist").innerHTML = `<p class="note">Couldn't load addresses.js.</p>`; });
+}
+
+// ---------- render
+function render() {
+  if (state.selected != null && state.lad && A[state.selected].lad !== state.lad) state.selected = null;
+  agg = aggregate();
+  const meds = agg.map(g => g.median).filter(m => m != null).sort((a, b) => a - b);
+  // 7 quantile bands, rounded to £5k and kept strictly increasing so no band repeats.
+  breaks = [];
+  for (let k = 1; k <= 6; k++) {
+    let v = Math.round((meds[Math.floor((meds.length * k) / 7)] || 0) / 5000) * 5000;
+    if (breaks.length && v <= breaks[breaks.length - 1]) v = breaks[breaks.length - 1] + 5000;
+    breaks.push(v);
+  }
+  geoLayer.eachLayer(styleLayer);
+  if (state.lad) { const ls = []; geoLayer.eachLayer(l => { if (A[l._i].lad === state.lad) ls.push(l); }); if (ls.length) map.fitBounds(L.featureGroup(ls).getBounds(), { padding: [6, 6] }); }
+  renderLegend(); renderTiles(); renderBars(); renderScatter(); renderArea();
+}
+render();
+})();
+</script>
+</body>
+</html>

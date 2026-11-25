@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+.DS_Store
+
+# Large raw downloads (re-create with ./download_data.sh). GitHub rejects files over 100 MB.
+data/raw/land_registry/
+data/raw/ons/
