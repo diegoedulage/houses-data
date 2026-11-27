@@ -1,0 +1,45 @@
+# Layer 3: build the website from data/extracts and publish it to GitHub Pages.
+#
+# Runs ONLY when started by hand (Actions tab -> "Publish site" -> Run workflow), so nothing goes
+# online by accident. Before the first run, read LICENCES.md (personal data note on EPC facts).
+# GitHub Pages needs a public repository, or a paid GitHub plan for a private one; in
+# Settings -> Pages choose "GitHub Actions" as the source.
+name: Publish site
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Build site/*.js from data/extracts
+        run: python -I build_data.py
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

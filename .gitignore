@@ -2,7 +2,10 @@
 __pycache__/
 .DS_Store
 
-# Large raw downloads (re-create with ./download_data.sh). GitHub rejects files over 100 MB.
-data/raw/land_registry/
-data/raw/ons/
-data/raw/schools/
+# Layer 1: raw downloads (~15 GB). Never in git; re-create with ./download_data.sh.
+# (EPC address fields in data/raw/epc are not open data and must not be published.)
+data/raw/
+
+# Layer 3: the site's data files are generated from data/extracts by build_data.py
+# (locally, or by the GitHub Actions workflow when publishing).
+site/*.js

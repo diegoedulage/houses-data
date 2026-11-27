@@ -74,7 +74,101 @@ th { color: var(--ink-2); font-weight: 600; }
 .salelist { max-height: 260px; overflow: auto; margin-top: 6px; }
 .salelist td:first-child { white-space: normal; }
 .leaflet-container { font: inherit; }
+.ms { position: relative; }
+.ms-btn { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 6px 28px 6px 10px; min-width: 170px; max-width: 240px; text-align: left; cursor: pointer; position: relative;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ms-btn::after { content: ""; position: absolute; right: 11px; top: 50%; width: 6px; height: 6px; margin-top: -5px;
+  border-right: 1.5px solid var(--ink-2); border-bottom: 1.5px solid var(--ink-2); transform: rotate(45deg); }
+.ms-btn[aria-expanded="true"] { border-color: var(--accent); }
+.ms-pop { position: absolute; z-index: 1500; top: calc(100% + 4px); left: 0; min-width: 220px; max-height: 360px; overflow: auto;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.14); padding: 6px; }
+.ms-pop[hidden] { display: none; }
+.ms-group { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em;
+  padding: 8px 8px 4px; display: flex; justify-content: space-between; gap: 8px; }
+.ms-group button { font-size: 11px; text-transform: none; letter-spacing: 0; font-weight: 500; }
+.filters .ms-opt { flex-direction: row; gap: 8px; font-size: 13px; color: var(--ink); }
+.ms-opt { display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 6px; cursor: pointer; font-size: 13px; color: var(--ink); }
+.ms-opt:hover { background: var(--hover); }
+.ms-opt input { margin: 0; accent-color: var(--accent); }
+.ms-foot { display: flex; justify-content: space-between; border-top: 1px solid var(--grid); margin-top: 6px; padding: 6px 8px 2px; }
+.pr-pop { width: 300px; padding: 10px 12px; }
+.pr-inputs { display: flex; align-items: end; gap: 8px; }
+.pr-inputs label { flex: 1; display: flex; flex-direction: column; gap: 3px; font-size: 11px; color: var(--ink-2); }
+.pr-inputs input { font: inherit; font-size: 13px; color: var(--ink); background: var(--page); border: 1px solid var(--border);
+  border-radius: 6px; padding: 5px 8px; width: 100%; font-variant-numeric: tabular-nums; }
+.pr-inputs input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.pr-inputs input[aria-invalid="true"] { outline: 2px solid #d03b3b; }
+.pr-slider { position: relative; height: 56px; margin-top: 8px; }
+.pr-slider svg { position: absolute; left: 8px; right: 8px; top: 0; width: calc(100% - 16px); height: 36px; }
+.pr-track { position: absolute; left: 8px; right: 8px; top: 40px; height: 4px; border-radius: 2px; background: var(--grid); }
+.pr-fill { position: absolute; top: 0; bottom: 0; background: var(--accent); border-radius: 2px; }
+.pr-slider input[type=range] { position: absolute; left: 0; right: 0; top: 32px; width: 100%; margin: 0; height: 20px;
+  background: none; pointer-events: none; -webkit-appearance: none; appearance: none; }
+.pr-slider input[type=range]::-webkit-slider-runnable-track { background: none; height: 20px; }
+.pr-slider input[type=range]::-moz-range-track { background: none; }
+.pr-slider input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; pointer-events: auto; width: 18px; height: 18px;
+  margin-top: 1px; border-radius: 50%; background: var(--surface); border: 2px solid var(--accent); cursor: grab; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+.pr-slider input[type=range]::-moz-range-thumb { pointer-events: auto; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--surface); border: 2px solid var(--accent); cursor: grab; }
+.pr-slider input[type=range]:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pr-scale { position: relative; height: 14px; margin: 0 8px; font-size: 10px; color: var(--muted); }
+.pr-scale span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.pr-scale span:first-child { transform: none; } .pr-scale span:last-child { transform: translateX(-100%); }
+.pr-pop { max-width: calc(100vw - 32px); }
+.pr-presets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.pr-presets button { font: inherit; font-size: 11px; color: var(--ink-2); background: var(--page); border: 1px solid var(--border);
+  border-radius: 999px; padding: 3px 9px; cursor: pointer; }
+.pr-presets button:hover { color: var(--ink); border-color: var(--accent); }
+.filters .lbl { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--ink-2); }
+.sq { display: block; border: 2px solid #fff; box-sizing: border-box; box-shadow: 0 0 0 1px rgba(0,0,0,.25); }
+.tag { font-size: 10px; font-weight: 600; border: 1px solid var(--border); border-radius: 4px; padding: 0 4px; color: var(--ink-2); margin-left: 4px; }
 .sch { margin-top: 10px; }
+[hidden] { display: none !important; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 6px 0 2px; }
+.seg button { font: inherit; font-size: 12px; background: var(--surface); color: var(--ink-2); border: 0; padding: 4px 10px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.salelist { overflow-x: auto; }
+.salelist a.addr { color: var(--ink); text-decoration: underline; text-decoration-color: var(--axis); text-underline-offset: 2px; }
+.noise { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.noise i { width: 10px; height: 10px; border-radius: 2px; border: 1px solid var(--border); flex: none; }
+.eth { display: grid; grid-template-columns: 1fr 90px 38px; gap: 2px 6px; align-items: center; font-size: 11px; margin-top: 4px; }
+.eth .bar { height: 7px; border-radius: 2px; background: var(--grid); overflow: hidden; }
+.eth .bar b { display: block; height: 100%; background: var(--accent); }
+.eth span:nth-child(3n) { text-align: right; font-variant-numeric: tabular-nums; }
+.pic { background: none; border: 0; }
+.pic span { display: flex; align-items: center; justify-content: center; box-sizing: border-box; width: 100%; height: 100%;
+  border: 1.5px solid #fff; box-shadow: 0 1px 2.5px rgba(0,0,0,.45); }
+.pic svg, .lg-ic svg { display: block; width: 72%; height: 72%; }
+.lg-ic { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 4px;
+  vertical-align: -3px; box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
+.house-icon { background: none; border: 0; }
+.house-icon svg { display: block; filter: drop-shadow(0 1px 1.5px rgba(0,0,0,.45)); }
+.house-icon .cnt { position: absolute; top: -6px; right: -8px; min-width: 15px; height: 15px; padding: 0 3px; border-radius: 8px;
+  background: #0b0b0b; color: #fff; font: 600 10px/15px system-ui, sans-serif; text-align: center; }
+.house-icon.on svg { transform: scale(1.35); transform-origin: 50% 100%; }
+.house-pop { min-width: 230px; }
+.house-pop .hp-list { max-height: 300px; overflow-y: auto; margin-top: 6px; }
+.house-pop .hp-sale { padding: 6px 0; border-top: 1px solid var(--grid); }
+.house-pop .hp-name { font-weight: 600; font-size: 12px; }
+.house-pop .hp-top { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; }
+.house-pop .hp-grid { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin-top: 4px; font-size: 12px; }
+.house-pop .hp-k { color: var(--ink-2); }
+.house-pop .hp-hist { margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--grid); font-size: 12px; }
+.house-pop .hp-hist table { width: 100%; border-collapse: collapse; margin: 4px 0; }
+.house-pop .hp-hist td { padding: 2px 4px 2px 0; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+.house-pop .hp-hist td:last-child { white-space: normal; }
+.house-pop details.hp-more summary { cursor: pointer; color: var(--accent); font-size: 12px; margin-top: 4px; }
+.pin { font: inherit; font-size: 11px; color: var(--accent); background: none; border: 0; padding: 0 0 0 4px; cursor: pointer; white-space: nowrap; }
+.pin:hover { text-decoration: underline; }
+.salelist tr.hl td { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.salelist a.sv { font-size: 11px; color: var(--accent); text-decoration: none; white-space: nowrap; }
+.salelist a.sv:hover { text-decoration: underline; }
+.salelist a.addr:hover { color: var(--accent); text-decoration-color: currentColor; }
+.salelist td, .salelist th { white-space: nowrap; }
+.salelist td:first-child { white-space: normal; min-width: 150px; }
+.epc { display: inline-block; min-width: 16px; text-align: center; font-weight: 700; font-size: 11px; border-radius: 3px; color: #fff; padding: 0 3px; }
 .sch h3 { font-size: 13px; margin: 8px 0 4px; }
 .sch-row { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; padding: 5px 0; border-bottom: 1px solid var(--grid); font-size: 12px; }
 .sch-row a { color: var(--ink); text-decoration: none; font-weight: 600; }
@@ -95,16 +189,43 @@ th { color: var(--ink-2); font-weight: 600; }
   <p class="sub">Every home sold, matched to its neighbourhood (LSOA) and the English Indices of Deprivation 2025. <span id="period-note"></span></p>
 
   <div class="filters">
-    <label>Area <select id="f-lad"></select></label>
-    <label>Property type
-      <select id="f-type">
-        <option value="">All types</option><option value="0">Detached</option><option value="1">Semi-detached</option>
-        <option value="2">Terraced</option><option value="3">Flat / maisonette</option>
-      </select></label>
-    <label>Period <select id="f-period"></select></label>
+    <div class="lbl"><span id="l-lad">Area</span><div class="ms" id="f-lad"></div></div>
+    <div class="lbl"><span id="l-type">Property type</span><div class="ms" id="f-type"></div></div>
+    <div class="lbl"><span id="l-tenure">Tenure</span><div class="ms" id="f-tenure"></div></div>
+    <div class="lbl"><span id="l-built">Built</span><div class="ms" id="f-built"></div></div>
+    <div class="lbl"><span id="l-price">Price</span>
+      <div class="ms" id="f-price">
+        <button type="button" class="ms-btn" id="f-price-btn" aria-haspopup="true" aria-expanded="false" aria-labelledby="l-price f-price-btn">Any price</button>
+        <div class="ms-pop pr-pop" hidden role="group" aria-labelledby="l-price">
+          <div class="pr-inputs">
+            <label>Min<input id="pr-min" inputmode="decimal" placeholder="No min" autocomplete="off"></label>
+            <span aria-hidden="true">–</span>
+            <label>Max<input id="pr-max" inputmode="decimal" placeholder="No max" autocomplete="off"></label>
+          </div>
+          <div class="note">Type e.g. 250000, 250k or 1.2m</div>
+          <div class="pr-slider">
+            <svg id="pr-hist" viewBox="0 0 200 36" preserveAspectRatio="none" aria-hidden="true"></svg>
+            <div class="pr-track"><div class="pr-fill" id="pr-fill"></div></div>
+            <input type="range" id="pr-lo" min="0" max="1000" step="1" value="0" aria-label="Minimum price">
+            <input type="range" id="pr-hi" min="0" max="1000" step="1" value="1000" aria-label="Maximum price">
+          </div>
+          <div class="pr-scale" id="pr-scale"></div>
+          <div class="pr-presets">
+            <button type="button" data-pr="0,150000">Under £150k</button><button type="button" data-pr="150000,300000">£150k–£300k</button>
+            <button type="button" data-pr="300000,500000">£300k–£500k</button><button type="button" data-pr="500000,0">£500k+</button>
+          </div>
+          <div class="ms-foot"><button type="button" class="link" id="pr-clear">Clear</button><button type="button" class="link" id="pr-done">Done</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="lbl"><span id="l-period">Period</span><div class="ms" id="f-period"></div></div>
     <label>Colour map by
       <select id="f-metric">
         <option value="price">Median sold price</option>
+        <option value="ppm">Median price per m²</option>
+        <option value="size">Median floor area (m²)</option>
+        <option value="transit">Distance to train or tram stop</option>
+        <option value="noisy">Road noise: homes at 55 dB or more</option>
         <option value="imd">Overall deprivation (IMD)</option>
         <option value="income">Income deprivation</option>
         <option value="employment">Employment deprivation</option>
@@ -114,10 +235,9 @@ th { color: var(--ink-2); font-weight: 600; }
         <option value="housing">Barriers to housing</option>
         <option value="environment">Living environment</option>
       </select></label>
-    <label>Schools on map
-      <select id="f-schools">
-        <option value="">Hide</option><option value="P">Primary</option><option value="S">Secondary</option><option value="PS">Primary &amp; secondary</option>
-      </select></label>
+    <div class="lbl"><span id="l-schools">Schools on map</span><div class="ms" id="f-schools"></div></div>
+    <div class="lbl"><span id="l-transport">Transport on map</span><div class="ms" id="f-transport"></div></div>
+    <div class="lbl"><span id="l-noise">Road noise map</span><div class="ms" id="f-noise"></div></div>
   </div>
 
   <div class="tiles" id="tiles"></div>
@@ -128,10 +248,13 @@ th { color: var(--ink-2); font-weight: 600; }
       <div id="map" style="margin-top:8px"></div>
       <div class="legend" id="legend"></div>
       <div class="slegend" id="slegend" hidden></div>
+      <div class="slegend" id="tlegend" hidden></div>
+      <div class="slegend" id="nlegend" hidden></div>
     </div>
     <div class="side">
       <div class="card">
-        <div class="row"><h2>Median price by deprivation decile</h2><button class="link" id="toggle-table">Show table</button></div>
+        <div class="row"><h2 id="bars-title">Median price by deprivation decile</h2><button class="link" id="toggle-table">Show table</button></div>
+        <div class="seg" role="group" aria-label="Bar chart measure"><button type="button" data-bar="price">Price</button><button type="button" data-bar="ppm">£ per m²</button><button type="button" data-bar="size">Floor area</button></div>
         <div class="note">1 = most deprived 10% of England, 10 = least deprived</div>
         <div class="chart" id="bars"></div>
         <div id="bars-table" hidden></div>
@@ -147,10 +270,15 @@ th { color: var(--ink-2); font-weight: 600; }
   </div>
 
   <p class="note" style="margin-top:16px">Sources: HM Land Registry Price Paid Data (standard residential sales, category A) ·
-    MHCLG English Indices of Deprivation 2025 · ONS Postcode to LSOA lookup (May 2026) · ONS LSOA 2021 boundaries · Neighbourhood names: House of Commons Library MSOA Names.
-    Contains HM Land Registry data © Crown copyright and database right 2026, licensed under the Open Government Licence v3.0.
-    Contains OS data © Crown copyright and database right 2026.
-    Schools: DfE Get Information about Schools · Ofsted state-funded schools inspections and outcomes as at 31 August 2026.</p>
+    MHCLG English Indices of Deprivation 2025 · MHCLG Energy Performance of Buildings data (floor area, rooms, rating, build period; no EPC addresses are used on this page) ·
+    ONS Postcode to OA (2021) to LSOA lookup and LSOA 2021 boundaries · House of Commons Library MSOA Names · OS Open UPRN ·
+    DfE Get Information about Schools · DfE Schools, pupils and their characteristics (January 2026) · Ofsted inspection outcomes (31 August 2026) ·
+    DfT NaPTAN · Defra strategic noise mapping, Round 4 (2021).<br>
+    Contains HM Land Registry data © Crown copyright and database right 2026. This data is licensed under the Open Government Licence v3.0.
+    Contains OS data © Crown copyright and database right 2026. Contains Royal Mail data © Royal Mail copyright and database right 2026.
+    Source: Office for National Statistics licensed under the Open Government Licence v.3.0.
+    Other public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>.
+    Modelled and published figures, provided as is: check important details with official sources.</p>
 </div>
 <div class="tip" id="tip"></div>
 
@@ -158,6 +286,7 @@ th { color: var(--ink-2); font-weight: 600; }
 <script src="data.js"></script>
 <script src="boundaries.js"></script>
 <script src="schools.js"></script>
+<script src="stops.js"></script>
 <script>
 (() => {
 const D = window.GM_DATA, S = D.sales, A = D.areas, N = S.p.length;
@@ -176,45 +305,238 @@ const dark = () => matchMedia("(prefers-color-scheme: dark)").matches && documen
 const BLUE = ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"];
 const DECILE = ["#a1262a", "#c43b3b", "#e05f5c", "#ef9590", "#f6c7c2", "#c6dcf6", "#9ec5f4", "#6da7ec", "#2a78d6", "#184f95"];
 
+// ---------- multi-select control
+// A button that opens a list of checkboxes, optionally in groups. Empty selection means "all"
+// (or, for the schools filter, "hidden"). Group headers can select or clear their whole group.
+function MultiSelect(root, { groups, labelledBy, empty, summary, onChange }) {
+  let value = [];
+  const id = root.id;
+  root.innerHTML = `<button type="button" class="ms-btn" aria-haspopup="true" aria-expanded="false" aria-labelledby="${labelledBy} ${id}-btn" id="${id}-btn"></button>
+    <div class="ms-pop" hidden role="group" aria-labelledby="${labelledBy}">
+      ${groups.map((g, gi) => `${g.label ? `<div class="ms-group"><span>${g.label}</span>${g.toggle ? `<button type="button" class="link" data-g="${gi}">All</button>` : ""}</div>` : ""}
+        ${g.options.map(o => `<label class="ms-opt"><input type="checkbox" value="${o.value}">${o.label}</label>`).join("")}`).join("")}
+      <div class="ms-foot"><button type="button" class="link" data-clear>Clear</button><button type="button" class="link" data-done>Done</button></div>
+    </div>`;
+  const btn = root.querySelector(".ms-btn"), pop = root.querySelector(".ms-pop");
+  const boxes = [...root.querySelectorAll("input")];
+  const labelOf = v => groups.flatMap(g => g.options).find(o => o.value === v)?.label ?? v;
+  function paint() {
+    boxes.forEach(b => b.checked = value.includes(b.value));
+    btn.textContent = summary ? summary(value, labelOf) : !value.length ? empty : value.length <= 2 ? value.map(labelOf).join(", ") : `${value.length} selected`;
+  }
+  const set = (v, fire = true) => { value = [...new Set(v)]; paint(); if (fire) onChange(value); };
+  const open = show => { pop.hidden = !show; btn.setAttribute("aria-expanded", show); if (show) boxes[0]?.focus(); };
+  btn.addEventListener("click", () => open(pop.hidden));
+  boxes.forEach(b => b.addEventListener("change", () => set(boxes.filter(x => x.checked).map(x => x.value))));
+  root.querySelectorAll("[data-g]").forEach(t => t.addEventListener("click", () => {
+    const vals = groups[+t.dataset.g].options.map(o => o.value);
+    const allOn = vals.every(v => value.includes(v));
+    set(allOn ? value.filter(v => !vals.includes(v)) : value.concat(vals));
+  }));
+  root.querySelector("[data-clear]").addEventListener("click", () => set([]));
+  root.querySelector("[data-done]").addEventListener("click", () => { open(false); btn.focus(); });
+  document.addEventListener("click", e => { if (!root.contains(e.target)) open(false); });
+  root.addEventListener("keydown", e => { if (e.key === "Escape") { open(false); btn.focus(); } });
+  return { get value() { return value; }, set, label: () => btn.textContent };
+}
+
 // ---------- filters
-// Area filter: "" = everything, "region:<name>" = a whole region, otherwise a single local authority.
 const regions = [...new Set(A.map(a => a.region))].sort().reverse(); // Greater Manchester first
-$("f-lad").innerHTML = `<option value="">Greater Manchester &amp; Cheshire</option>`
-  + regions.map(r => `<option value="region:${r}">All of ${r}</option>`).join("")
-  + regions.map(r => `<optgroup label="${r}">${[...new Set(A.filter(a => a.region === r).map(a => a.lad))].sort()
-      .map(l => `<option>${l}</option>`).join("")}</optgroup>`).join("");
-const inScope = a => !state.lad || (state.lad.startsWith("region:") ? a.region === state.lad.slice(7) : a.lad === state.lad);
+const ladsOf = r => [...new Set(A.filter(a => a.region === r).map(a => a.lad))].sort();
 const last = dayOf(D.updated);
 const years = [...new Set(S.d.map(d => new Date(EPOCH + d * DAY).getUTCFullYear()))].sort((a, b) => b - a);
 const periods = [
   { label: "Last 12 months", from: last - 364, to: last },
   { label: "Last 3 years", from: last - 3 * 365 + 1, to: last },
   ...years.map(y => ({ label: String(y) + (y === years[0] ? " (to date)" : ""), from: dayOf(`${y}-01-01`), to: dayOf(`${y}-12-31`) })),
-  { label: "All (" + years[years.length - 1] + "–" + years[0] + ")", from: 0, to: last },
 ];
-$("f-period").innerHTML = periods.map((p, i) => `<option value="${i}">${p.label}</option>`).join("");
 $("period-note").textContent = `Sales from ${fmtDate(0)} to ${fmtDate(last)}.`;
 
-const state = { lad: "", type: "", period: 0, metric: "price", schools: "", selected: null };
-try { Object.assign(state, JSON.parse(localStorage.getItem("gm-filters") || "{}"), { selected: null }); } catch (e) {}
-if (![...$("f-lad").options].some(o => o.value === state.lad)) state.lad = "";
-$("f-lad").value = state.lad; $("f-type").value = state.type; $("f-period").value = state.period; $("f-metric").value = state.metric; $("f-schools").value = state.schools;
-for (const [id, key] of [["f-lad", "lad"], ["f-type", "type"], ["f-period", "period"], ["f-metric", "metric"], ["f-schools", "schools"]])
-  $(id).addEventListener("change", e => { state[key] = e.target.value; try { localStorage.setItem("gm-filters", JSON.stringify({ ...state, selected: null })); } catch (er) {} render(); });
+const bandLabel = k => { const b = D.ageBands[k]; return b[0] === "b" ? "Before 1900" : b.replace("-", "–"); };
+const ERAS = [["Pre-war", [0, 1, 2]], ["Post-war", [3, 4, 5, 6]], ["1990s–2000s", [7, 8, 9, 10]], ["Recent", [11, 12]]];
+const DEFAULTS = { lad: [], type: [], tenure: [], built: [], period: ["0"], metric: "price", schools: [], transport: [], bar: "price", priceMin: 0, priceMax: 0, noise: false };
+const state = { ...DEFAULTS, selected: null };
+try {
+  const saved = JSON.parse(localStorage.getItem("gm-filters-v2") || "{}");
+  for (const k of Object.keys(DEFAULTS)) if (saved[k] !== undefined && Array.isArray(saved[k]) === Array.isArray(DEFAULTS[k])) state[k] = saved[k];
+} catch (e) {}
+const save = () => { try { localStorage.setItem("gm-filters-v2", JSON.stringify({ ...state, selected: null })); } catch (e) {} };
+const changed = key => v => { state[key] = v; save(); render(); };
+
+const inScope = a => !state.lad.length || state.lad.includes(a.lad);
+const F = {
+  lad: MultiSelect($("f-lad"), {
+    labelledBy: "l-lad", onChange: changed("lad"),
+    groups: regions.map(r => ({ label: r, toggle: true, options: ladsOf(r).map(l => ({ value: l, label: l })) })),
+    summary: v => {
+      if (!v.length) return "Greater Manchester & Cheshire";
+      for (const r of regions) { const ls = ladsOf(r); if (v.length === ls.length && ls.every(l => v.includes(l))) return `All of ${r}`; }
+      return v.length <= 2 ? v.join(", ") : `${v.length} areas`;
+    },
+  }),
+  type: MultiSelect($("f-type"), {
+    labelledBy: "l-type", empty: "All types", onChange: changed("type"),
+    groups: [{ options: [["0", "Detached"], ["1", "Semi-detached"], ["2", "Terraced"], ["3", "Flat / maisonette"]].map(([value, label]) => ({ value, label })) }],
+  }),
+  // Build period from the EPC. Bands are the EPC's own (they don't fall on decades), grouped by era.
+  built: MultiSelect($("f-built"), {
+    labelledBy: "l-built", empty: "Any age", onChange: changed("built"),
+    groups: ERAS.map(([label, ks]) => ({ label, toggle: true, options: ks.map(k => ({ value: String(k), label: bandLabel(k) })) }))
+      .concat([{ label: "Other", options: [{ value: "-1", label: "Unknown (no EPC)" }] }]),
+    // Name whole eras ("Pre-war, Recent"); otherwise list up to two bands.
+    summary: (v, labelOf) => {
+      if (!v.length) return "Any age";
+      const left = new Set(v), parts = [];
+      for (const [label, ks] of ERAS) if (ks.every(k => left.has(String(k)))) { parts.push(label); ks.forEach(k => left.delete(String(k))); }
+      parts.push(...[...left].map(labelOf));
+      return parts.length <= 2 ? parts.join(", ") : `${v.length} periods`;
+    },
+  }),
+  period: MultiSelect($("f-period"), {
+    labelledBy: "l-period", empty: "All (" + years[years.length - 1] + "–" + years[0] + ")", onChange: changed("period"),
+    groups: [{ label: "Rolling", options: periods.slice(0, 2).map((p, i) => ({ value: String(i), label: p.label })) },
+             { label: "Calendar year", options: periods.slice(2).map((p, i) => ({ value: String(i + 2), label: p.label })) }],
+  }),
+  schools: MultiSelect($("f-schools"), {
+    labelledBy: "l-schools", empty: "Hidden", onChange: changed("schools"),
+    groups: [{ label: "Level", options: [{ value: "P", label: "Primary" }, { value: "S", label: "Secondary" }] },
+             { label: "Funding", options: [{ value: "State", label: "State" }, { value: "Private", label: "Private (independent)" }] }],
+    summary: v => {
+      if (!v.length) return "Hidden";
+      const lv = v.filter(x => x === "P" || x === "S"), fu = v.filter(x => x.length > 1);
+      const a = lv.length === 1 ? (lv[0] === "P" ? "Primary" : "Secondary") : "All levels";
+      const b = fu.length === 1 ? fu[0] : "state & private";
+      return `${a}, ${b}`;
+    },
+  }),
+};
+F.transport = MultiSelect($("f-transport"), {
+  labelledBy: "l-transport", empty: "Hidden", onChange: changed("transport"),
+  groups: [{ options: [{ value: "r", label: "Train stations" }, { value: "t", label: "Tram stops (Metrolink)" }, { value: "b", label: "Bus stops" }] }],
+  summary: (v, labelOf) => !v.length ? "Hidden" : v.length === 3 ? "Train, tram & bus" : v.map(x => ({ r: "Train", t: "Tram", b: "Bus" })[x]).join(", "),
+});
+F.tenure = MultiSelect($("f-tenure"), {
+  labelledBy: "l-tenure", empty: "Freehold & leasehold", onChange: changed("tenure"),
+  groups: [{ options: [{ value: "0", label: "Freehold" }, { value: "1", label: "Leasehold" }] }],
+});
+F.noise = MultiSelect($("f-noise"), {
+  labelledBy: "l-noise", empty: "Hidden", onChange: v => { state.noise = v.length > 0; save(); renderNoise(); },
+  groups: [{ options: [{ value: "on", label: "Show road noise (Defra, 2021)" }] }],
+  summary: v => v.length ? "Shown" : "Hidden",
+});
+F.noise.set(state.noise ? ["on"] : [], false);
+for (const k of ["lad", "type", "tenure", "built", "period", "schools", "transport"]) F[k].set(state[k], false);
+$("f-metric").value = state.metric;
+
+// ---------- price range: typed min/max plus a two-handle slider on a log scale (£10k–£3m+)
+const PR_LO = 10000, PR_HI = 3000000; // slider ends; 0 means "no limit" in state
+const prNice = v => v < 100000 ? Math.round(v / 1000) * 1000 : v < 1000000 ? Math.round(v / 5000) * 5000 : Math.round(v / 25000) * 25000;
+const prFromPos = pos => prNice(PR_LO * (PR_HI / PR_LO) ** (pos / 1000));
+const prToPos = v => Math.max(0, Math.min(1000, Math.round(1000 * Math.log(v / PR_LO) / Math.log(PR_HI / PR_LO))));
+function parsePrice(t) { // "250000", "250,000", "£250k", "1.2m" -> number; "" -> 0; junk -> NaN
+  t = String(t).trim().toLowerCase().replace(/[£,\s]/g, "");
+  if (!t) return 0;
+  const m = t.match(/^(\d+(?:\.\d+)?)([km]?)$/); if (!m) return NaN;
+  return Math.round(parseFloat(m[1]) * (m[2] === "m" ? 1e6 : m[2] === "k" ? 1e3 : 1));
+}
+const prText = v => v ? v.toLocaleString("en-GB") : "";
+const priceLabel = () => {
+  const { priceMin: a, priceMax: b } = state;
+  return !a && !b ? "Any price" : a && b ? `${gbpK(a)} – ${gbpK(b)}` : a ? `${gbpK(a)}+` : `Up to ${gbpK(b)}`;
+};
+function paintPrice(fromInput) {
+  const lo = state.priceMin ? prToPos(state.priceMin) : 0, hi = state.priceMax ? prToPos(state.priceMax) : 1000;
+  $("pr-lo").value = lo; $("pr-hi").value = hi;
+  $("pr-lo").setAttribute("aria-valuetext", state.priceMin ? gbp(state.priceMin) : "No minimum");
+  $("pr-hi").setAttribute("aria-valuetext", state.priceMax ? gbp(state.priceMax) : "No maximum");
+  // when the handles meet, keep the one that can still move on top
+  $("pr-lo").style.zIndex = lo > 500 ? 3 : 1; $("pr-hi").style.zIndex = 2;
+  $("pr-fill").style.left = lo / 10 + "%"; $("pr-fill").style.right = (100 - hi / 10) + "%";
+  if (fromInput !== "min") $("pr-min").value = prText(state.priceMin);
+  if (fromInput !== "max") $("pr-max").value = prText(state.priceMax);
+  $("f-price-btn").textContent = priceLabel();
+  // highlight histogram bars inside the range
+  document.querySelectorAll("#pr-hist rect").forEach((r, k) => r.style.opacity = (k + 0.5) * 25 >= lo && (k + 0.5) * 25 <= hi ? 1 : 0.3);
+}
+let prTimer;
+function setPrice(min, max, fromInput) {
+  if (min && max && min > max) [min, max] = fromInput === "max" ? [max, max] : [min, min];
+  state.priceMin = min || 0; state.priceMax = max || 0;
+  paintPrice(fromInput); save();
+  clearTimeout(prTimer); prTimer = setTimeout(render, 120); // keep dragging smooth
+}
+// histogram of all sale prices on the slider's log scale (40 bins)
+(() => {
+  const bins = new Array(40).fill(0);
+  for (let i = 0; i < N; i++) bins[Math.min(39, Math.floor(prToPos(Math.max(PR_LO, S.p[i])) / 25))]++;
+  const mx = Math.max(...bins), svg = $("pr-hist");
+  svg.innerHTML = bins.map((c, k) => `<rect x="${k * 5 + 0.5}" width="4" y="${36 - (c / mx) * 34}" height="${(c / mx) * 34}" rx="1" fill="${css("--accent")}" />`).join("");
+})();
+$("pr-lo").addEventListener("input", e => {
+  const pos = Math.min(+e.target.value, +$("pr-hi").value);
+  setPrice(pos <= 0 ? 0 : prFromPos(pos), state.priceMax, "slider");
+});
+$("pr-hi").addEventListener("input", e => {
+  const pos = Math.max(+e.target.value, +$("pr-lo").value);
+  setPrice(state.priceMin, pos >= 1000 ? 0 : prFromPos(pos), "slider");
+});
+for (const [id, key] of [["pr-min", "min"], ["pr-max", "max"]]) {
+  const inp = $(id);
+  const apply = final => {
+    const v = parsePrice(inp.value);
+    inp.setAttribute("aria-invalid", Number.isNaN(v));
+    if (Number.isNaN(v)) return;
+    setPrice(key === "min" ? v : state.priceMin, key === "max" ? v : state.priceMax, final ? undefined : key);
+  };
+  inp.addEventListener("input", () => apply(false));
+  inp.addEventListener("change", () => apply(true)); // on blur/Enter, tidy to "250,000"
+  inp.addEventListener("keydown", e => { if (e.key === "Enter") apply(true); });
+}
+document.querySelectorAll("[data-pr]").forEach(b => b.addEventListener("click", () => { const [a, c] = b.dataset.pr.split(",").map(Number); setPrice(a, c); }));
+$("pr-clear").addEventListener("click", () => setPrice(0, 0));
+(() => { // open/close like the other filters
+  const root = $("f-price"), btn = $("f-price-btn"), pop = root.querySelector(".pr-pop");
+  const open = show => {
+    pop.hidden = !show; btn.setAttribute("aria-expanded", show);
+    if (!show) return;
+    pop.style.left = "0"; pop.style.right = "auto"; // flip to the right edge if it would overflow the screen
+    if (pop.getBoundingClientRect().right > innerWidth - 8) { pop.style.left = "auto"; pop.style.right = "0"; }
+    $("pr-min").focus();
+  };
+  btn.addEventListener("click", () => open(pop.hidden));
+  $("pr-done").addEventListener("click", () => { open(false); btn.focus(); });
+  document.addEventListener("click", e => { if (!root.contains(e.target)) open(false); });
+  root.addEventListener("keydown", e => { if (e.key === "Escape") { open(false); btn.focus(); } });
+})();
+$("pr-scale").innerHTML = [[PR_LO, "£10k"], [1e5, "£100k"], [3e5, "£300k"], [1e6, "£1m"], [PR_HI, "£3m+"]]
+  .map(([v, t]) => `<span style="left:${prToPos(v) / 10}%">${t}</span>`).join("");
+paintPrice();
+$("f-metric").addEventListener("change", e => changed("metric")(e.target.value));
 
 // ---------- aggregation
 let agg; // per area: {prices:[], idx:[]}
 function aggregate() {
-  const p = periods[+state.period] || periods[0], type = state.type === "" ? -1 : +state.type;
-  const per = A.map(() => ({ prices: [], idx: [] }));
+  // Selected periods are combined (a sale counts if it falls in any of them); none = all dates.
+  const ps = state.period.map(i => periods[+i]).filter(Boolean);
+  const types = state.type.length ? new Set(state.type.map(Number)) : null;
+  const built = state.built.length ? new Set(state.built.map(Number)) : null;
+  const tenure = state.tenure.length === 1 ? +state.tenure[0] : -1; // both ticked = no filter
+  const pMin = state.priceMin, pMax = state.priceMax;
+  const per = A.map(() => ({ prices: [], idx: [], ppm: [], size: [] }));
   for (let i = 0; i < N; i++) {
-    if (S.d[i] < p.from || S.d[i] > p.to) continue;
-    if (type >= 0 && S.t[i] !== type) continue;
+    const d = S.d[i];
+    if (ps.length && !ps.some(p => d >= p.from && d <= p.to)) continue;
+    if (types && !types.has(S.t[i])) continue;
+    if (built && !built.has(S.g[i])) continue;
+    if (tenure >= 0 && S.l[i] !== tenure) continue;
+    if ((pMin && S.p[i] < pMin) || (pMax && S.p[i] > pMax)) continue;
     const a = A[S.a[i]];
     if (!inScope(a)) continue;
-    per[S.a[i]].prices.push(S.p[i]); per[S.a[i]].idx.push(i);
+    const g = per[S.a[i]];
+    g.prices.push(S.p[i]); g.idx.push(i);
+    if (S.f[i] > 0) { g.ppm.push(S.p[i] / S.f[i]); g.size.push(S.f[i]); }
   }
-  per.forEach(x => { x.median = median(x.prices); });
+  per.forEach(x => { x.median = median(x.prices); x.ppmMed = median(x.ppm); x.sizeMed = median(x.size); });
   return per;
 }
 
@@ -242,10 +564,10 @@ const geoLayer = L.geoJSON(window.GM_GEO, {
   onEachFeature: (f, layer) => {
     const i = codeIdx[f.properties.code]; layer._i = i;
     // No bringToFront() on hover: moving the element in the DOM swallows the click.
-    layer.on("mouseover", e => { layer.setStyle({ weight: 2, color: css("--ink") }); showTip(tipArea(i), e.originalEvent); });
-    layer.on("mousemove", e => showTip(tipArea(i), e.originalEvent));
+    layer.on("mouseover", e => { layer.setStyle({ weight: 2, color: css("--ink") }); showTip(hoverHtml(i, e.latlng), e.originalEvent); });
+    layer.on("mousemove", e => showTip(hoverHtml(i, e.latlng), e.originalEvent));
     layer.on("mouseout", () => { hideTip(); styleLayer(layer); });
-    layer.on("click", () => selectArea(i, false));
+    layer.on("click", () => selectArea(i, true));
   },
 }).addTo(map);
 // Zoom the map to the areas in the current Area filter.
@@ -261,12 +583,22 @@ new ResizeObserver(() => {
   if (!fitted && $("map").offsetWidth > 0) { fitted = true; fitScope(); }
 }).observe($("map"));
 
+// Measures computed from sales (the rest of the map options are deprivation deciles).
+const gbpN = v => "£" + Math.round(v).toLocaleString("en-GB");
+const VALUE = {
+  price: { label: "Median sold price", get: g => g.median, short: gbpK, long: gbp, round: 5000 },
+  ppm: { label: "Median price per m²", get: g => g.ppmMed, short: gbpN, long: v => v == null ? "–" : gbpN(v) + "/m²", round: 50 },
+  noisy: { label: "Homes sold at 55 dB+ road noise", get: (g, a) => a.noisy, short: v => Math.round(v) + "%", long: v => v == null ? "–" : v + "%", round: 5 },
+  transit: { label: "Distance to nearest train or tram stop", get: (g, a) => a.tr ? a.tr.rt : null, short: v => (v / 1000).toFixed(1) + " km",
+    long: v => v == null ? "–" : km(v), round: 100 },
+  size: { label: "Median floor area", get: g => g.sizeMed, short: v => Math.round(v) + " m²", long: v => v == null ? "–" : Math.round(v) + " m²", round: 5 },
+};
 let breaks = [];
 function colorFor(i) {
   const a = A[i];
   if (!inScope(a)) return null;
-  if (state.metric === "price") {
-    const m = agg[i].median; if (m == null) return "transparent";
+  if (VALUE[state.metric]) {
+    const m = VALUE[state.metric].get(agg[i], a); if (m == null) return "transparent";
     let b = 0; while (b < breaks.length && m >= breaks[b]) b++; return BLUE[b];
   }
   return DECILE[a[state.metric] - 1];
@@ -278,22 +610,26 @@ function styleLayer(layer) {
     weight: sel ? 2.5 : 0.4, color: sel ? css("--ink") : css("--surface") });
   if (sel) layer.bringToFront();
 }
-const METRIC_LABEL = { price: "Median sold price", imd: "Overall deprivation decile (IMD)", income: "Income deprivation decile",
+const METRIC_LABEL = { noisy: "Share of homes sold with road noise of 55 dB or more", transit: "Distance to nearest train or tram stop", price: "Median sold price", ppm: "Median price per m²", size: "Median floor area", imd: "Overall deprivation decile (IMD)", income: "Income deprivation decile",
   employment: "Employment deprivation decile", education: "Education & skills deprivation decile", health: "Health & disability deprivation decile",
   crime: "Crime deprivation decile", housing: "Barriers to housing decile", environment: "Living environment decile" };
+function hoverHtml(i) { return tipArea(i); }
 function tipArea(i) {
   const a = A[i], g = agg[i];
   return `<div><b>${a.hood || a.name}</b></div><div class="note">${a.hood ? a.name + " · " : ""}${a.lad}</div>
     <div>Median price: <b>${gbp(g.median)}</b> (${g.prices.length} sale${g.prices.length === 1 ? "" : "s"})</div>
-    <div>IMD decile: <b>${a.imd}</b> · rank ${a.rank.toLocaleString("en-GB")}</div>`;
+    ${g.ppm.length ? `<div>Per m²: <b>${VALUE.ppm.long(g.ppmMed)}</b> · size <b>${VALUE.size.long(g.sizeMed)}</b> <span class="note">(${g.ppm.length} with EPC)</span></div>` : ""}
+    <div>IMD decile: <b>${a.imd}</b> · rank ${a.rank.toLocaleString("en-GB")}</div>
+    ${a.tr ? `<div>Nearest station: <b>${esc(nearestStation(a).name)}</b> ${km(nearestStation(a).d)}</div>` : ""}`;
 }
 function renderLegend() {
   const L = $("legend");
-  if (state.metric === "price") {
+  if (VALUE[state.metric]) {
     // Each band labelled by its lower bound: short enough to fit on a phone.
-    const lab = [`<${gbpK(breaks[0])}`, ...breaks.slice(0, -1).map(b => gbpK(b)), `${gbpK(breaks[breaks.length - 1])}+`];
+    const f = VALUE[state.metric].short;
+    const lab = [`<${f(breaks[0])}`, ...breaks.slice(0, -1).map(b => f(b)), `${f(breaks[breaks.length - 1])}+`];
     L.innerHTML = BLUE.map((c, k) => `<div class="sw"><i style="background:${c}"></i><span>${lab[k]}</span></div>`).join("")
-      + `<div class="sw" style="flex:0 0 auto;margin-left:8px"><span>No sales: blank</span></div>`;
+      + (state.metric === "transit" ? "" : `<div class="sw" style="flex:0 0 auto;margin-left:8px"><span>No sales: blank</span></div>`);
   } else {
     L.innerHTML = DECILE.map((c, k) => `<div class="sw"><i style="background:${c}"></i><span>${k === 0 ? "1 most" : k === 9 ? "10 least" : k + 1}</span></div>`).join("");
   }
@@ -302,14 +638,16 @@ function renderLegend() {
 
 // ---------- tiles
 function renderTiles() {
-  const all = [], byDec = Array.from({ length: 10 }, () => []);
-  agg.forEach((g, i) => { for (const p of g.prices) { all.push(p); byDec[A[i].imd - 1].push(p); } });
+  const all = [], ppm = [], byDec = Array.from({ length: 10 }, () => []);
+  agg.forEach((g, i) => { for (const p of g.prices) { all.push(p); byDec[A[i].imd - 1].push(p); } ppm.push(...g.ppm); });
   const m1 = median(byDec[0]), m10 = median(byDec[9]);
   const areasInScope = A.filter(inScope);
   const share = areasInScope.filter(a => a.imd === 1).length / areasInScope.length;
   $("tiles").innerHTML = [
-    ["Homes sold", all.length.toLocaleString("en-GB"), periods[+state.period].label],
-    ["Median sold price", gbp(median(all)), state.type === "" ? "All property types" : TYPE_NAMES[+state.type]],
+    ["Homes sold", all.length.toLocaleString("en-GB"), F.period.label()],
+    ["Median sold price", gbp(median(all)), [state.type.length ? state.type.map(t => TYPE_NAMES[+t]).join(", ") : "All property types",
+      state.tenure.length === 1 ? F.tenure.label() : "", state.built.length ? "built " + F.built.label() : "", state.priceMin || state.priceMax ? priceLabel() : ""].filter(Boolean).join(" · ")],
+    ["Median price per m²", VALUE.ppm.long(median(ppm)), all.length ? `${Math.round(ppm.length / all.length * 100)}% of sales matched to an EPC` : "No sales"],
     ["In most deprived 10%", gbp(m1), `${byDec[0].length.toLocaleString("en-GB")} sales · median`],
     ["In least deprived 10%", gbp(m10), `${byDec[9].length.toLocaleString("en-GB")} sales · median`],
     ["Areas in England's most deprived 10%", Math.round(share * 100) + "%", `${areasInScope.length.toLocaleString("en-GB")} neighbourhoods in view`],
@@ -321,17 +659,20 @@ const SVGNS = "http://www.w3.org/2000/svg";
 function el(tag, attrs, parent) { const e = document.createElementNS(SVGNS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; }
 function niceMax(v) { const p = 10 ** Math.floor(Math.log10(v)); for (const m of [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10]) if (m * p >= v) return m * p; }
 function renderBars() {
+  const V = VALUE[state.bar] || VALUE.price, key = { price: "prices", ppm: "ppm", size: "size" }[state.bar] || "prices";
+  document.querySelectorAll("[data-bar]").forEach(b => b.setAttribute("aria-pressed", b.dataset.bar === state.bar));
+  $("bars-title").textContent = V.label + " by deprivation decile";
   const byDec = Array.from({ length: 10 }, () => []);
-  agg.forEach((g, i) => { for (const p of g.prices) byDec[A[i].imd - 1].push(p); });
+  agg.forEach((g, i) => { for (const p of g[key]) byDec[A[i].imd - 1].push(p); });
   const rows = byDec.map((ps, k) => ({ d: k + 1, m: median(ps), n: ps.length }));
   const W = 420, H = 230, ml = 44, mr = 6, mt = 10, mb = 26, iw = W - ml - mr, ih = H - mt - mb;
   const max = niceMax(Math.max(1, ...rows.map(r => r.m || 0)));
   const box = $("bars"); box.innerHTML = "";
-  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Median sold price for each deprivation decile" }, box);
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": V.label + " for each deprivation decile" }, box);
   for (let t = 0; t <= 4; t++) {
     const y = mt + ih - (ih * t) / 4;
     el("line", { x1: ml, x2: W - mr, y1: y, y2: y, stroke: t ? css("--grid") : css("--axis"), "stroke-width": 1 }, svg);
-    el("text", { x: ml - 6, y: y + 4, "text-anchor": "end" }, svg).textContent = gbpK(max * t / 4);
+    el("text", { x: ml - 6, y: y + 4, "text-anchor": "end" }, svg).textContent = t ? V.short(max * t / 4) : "0";
   }
   const bw = iw / 10, barW = Math.min(26, bw - 6);
   rows.forEach((r, k) => {
@@ -342,11 +683,12 @@ function renderBars() {
       el("path", { d: `M${x},${mt + ih} V${y + rr} Q${x},${y} ${x + rr},${y} H${x + barW - rr} Q${x + barW},${y} ${x + barW},${y + rr} V${mt + ih} Z`, fill: DECILE[k] }, svg);
     }
     const hit = el("rect", { x: ml + bw * k, y: mt, width: bw, height: ih, fill: "transparent" }, svg);
-    hit.addEventListener("mousemove", e => { hit.setAttribute("fill", css("--hover")); showTip(`<div>Decile <b>${r.d}</b>${r.d === 1 ? " (most deprived)" : r.d === 10 ? " (least deprived)" : ""}</div><div>Median: <b>${gbp(r.m)}</b></div><div>${r.n.toLocaleString("en-GB")} sales</div>`, e); });
+    hit.addEventListener("mousemove", e => { hit.setAttribute("fill", css("--hover")); showTip(`<div>Decile <b>${r.d}</b>${r.d === 1 ? " (most deprived)" : r.d === 10 ? " (least deprived)" : ""}</div><div>Median: <b>${V.long(r.m)}</b></div><div>${r.n.toLocaleString("en-GB")} sales${key === "prices" ? "" : " with an EPC"}</div>`, e); });
     hit.addEventListener("mouseleave", () => { hit.setAttribute("fill", "transparent"); hideTip(); });
   });
-  $("bars-table").innerHTML = `<table><tr><th>Decile</th><th>Median price</th><th>Sales</th></tr>${rows.map(r => `<tr><td>${r.d}</td><td>${gbp(r.m)}</td><td>${r.n.toLocaleString("en-GB")}</td></tr>`).join("")}</table>`;
+  $("bars-table").innerHTML = `<table><tr><th>Decile</th><th>${V.label}</th><th>Sales</th></tr>${rows.map(r => `<tr><td>${r.d}</td><td>${V.long(r.m)}</td><td>${r.n.toLocaleString("en-GB")}</td></tr>`).join("")}</table>`;
 }
+document.querySelectorAll("[data-bar]").forEach(b => b.addEventListener("click", () => { state.bar = b.dataset.bar; save(); renderBars(); }));
 $("toggle-table").addEventListener("click", e => { const t = $("bars-table"); t.hidden = !t.hidden; e.target.textContent = t.hidden ? "Show table" : "Hide table"; });
 
 // ---------- scatter: IMD rank vs median price
@@ -384,28 +726,63 @@ function renderScatter() {
 
 // ---------- area panel
 let addrLoading = null;
+// addresses.js (addresses + coordinates) and history.js (sales since 1995) load on the first area click.
+const loadScript = src => new Promise((res, rej) => { const s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
 function loadAddresses() {
   if (window.GM_ADDR) return Promise.resolve();
-  return addrLoading ||= new Promise((res, rej) => { const s = document.createElement("script"); s.src = "addresses.js"; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+  return addrLoading ||= Promise.all([loadScript("addresses.js"), loadScript("history.js").catch(() => {})]); // history is optional
 }
 const DOM_ROWS = [["imd", "Overall (IMD)"], ["income", "Income"], ["employment", "Employment"], ["education", "Education & skills"],
   ["health", "Health & disability"], ["crime", "Crime"], ["housing", "Barriers to housing"], ["environment", "Living environment"]];
 function selectArea(i, pan) {
-  state.selected = i; geoLayer.eachLayer(l => { styleLayer(l); if (pan && l._i === i) map.fitBounds(l.getBounds(), { maxZoom: 15 }); });
+  state.selected = i; geoLayer.eachLayer(l => { styleLayer(l); if (pan && l._i === i) map.fitBounds(l.getBounds(), { maxZoom: 16, padding: [20, 20] }); });
   renderArea(); renderScatter();
+}
+// Official EPC band colours (A dark green → G red), always with the letter.
+const EPC_COLORS = ["#008054", "#19b459", "#8dce46", "#ffd500", "#fcaa65", "#ef8023", "#e9153b"];
+const epcBadge = e => e >= 0 ? `<span class="epc" style="background:${EPC_COLORS[e]};${e === 3 ? "color:#0b0b0b" : ""}">${D.ratings[e]}</span>` : "–";
+function epcMix(idx) {
+  const c = [0, 0, 0, 0, 0, 0, 0]; let n = 0; idx.forEach(k => { if (S.e[k] >= 0) { c[S.e[k]]++; n++; } });
+  return n ? "EPC ratings: " + c.map((v, k) => v ? `${epcBadge(k)} ${v}` : "").filter(Boolean).join(" ") : "";
+}
+// Google Maps search for the address; it lands on the house, where Street View is one click away.
+const mapsUrl = addr => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr + ", UK");
+// Street View at the house's coordinates (OS Open UPRN via the EPC); missing when the sale had no EPC match.
+function svLink(k) {
+  const ll = window.GM_LL; if (!ll || !ll.lat[k]) return "";
+  const at = `${ll.lat[k] / 1e5},${ll.lon[k] / 1e5}`;
+  return ` <a class="sv" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${at}" target="_blank" rel="noopener" title="Open Google Street View at this house" aria-label="Street View">Street View ↗</a>`;
+}
+// Road noise band chip (Defra's own colours, always with the dB label)
+const noiseLabel = z => D.noiseBands[z].replace("-", "–").replace("under 40", "under 40") + " dB";
+const noiseChip = z => z >= 0 ? `<span class="noise"><i style="background:${D.noiseColors[z]}"></i>${noiseLabel(z)}</span>` : "–";
+function noiseMix(idx) {
+  const z = idx.map(k => S.z[k]).filter(v => v >= 0).sort((a, b) => a - b);
+  return z.length ? ` (typical: ${noiseLabel(z[z.length >> 1])})` : "";
+}
+function tenureMix(idx) {
+  let lh = 0, lhHouse = 0, houses = 0;
+  idx.forEach(k => { lh += S.l[k]; if (S.t[k] !== 3) { houses++; lhHouse += S.l[k]; } });
+  return `Leasehold: ${Math.round(lh / idx.length * 100)}% of sales` + (houses ? ` (${Math.round(lhHouse / houses * 100)}% of houses)` : "");
 }
 function renderArea() {
   const i = state.selected, box = $("area");
-  if (i == null) { box.innerHTML = `<h2>Neighbourhood</h2><p class="empty">Select an area on the map or a dot in the chart.</p>`; return; }
+  if (i == null) { clearHouses(); box.innerHTML = `<h2>Neighbourhood</h2><p class="empty">Select an area on the map or a dot in the chart.</p>`; return; }
   const a = A[i], g = agg[i];
   const typeCount = [0, 0, 0, 0, 0]; g.idx.forEach(k => typeCount[S.t[k]]++);
   box.innerHTML = `<div class="row"><h2>${a.hood || a.name}</h2><button class="link" id="clear-area">Clear</button></div>
     <div class="note">${a.name} · ${a.lad} · ${a.code} · IMD rank ${a.rank.toLocaleString("en-GB")} of 33,755</div>
     <div class="row" style="margin-top:8px"><div><div class="note">Median price</div><div style="font-size:20px;font-weight:600">${gbp(g.median)}</div></div>
       <div style="text-align:right"><div class="note">Sales in period</div><div style="font-size:20px;font-weight:600">${g.prices.length}</div></div></div>
+    ${g.ppm.length ? `<div class="row" style="margin-top:6px"><div><div class="note">Median per m²</div><div style="font-size:16px;font-weight:600">${VALUE.ppm.long(g.ppmMed)}</div></div>
+      <div style="text-align:right"><div class="note">Median floor area</div><div style="font-size:16px;font-weight:600">${VALUE.size.long(g.sizeMed)}</div></div></div>
+      <div class="note">${epcMix(g.idx)}</div>` : ""}
     <div class="note">${typeCount.map((c, k) => c ? `${TYPE_NAMES[k]} ${c}` : "").filter(Boolean).join(" · ") || "No sales for this selection"}</div>
+    ${g.idx.length ? `<div class="note">${tenureMix(g.idx)}</div>` : ""}
+    ${a.noisy != null ? `<div class="note">Road noise: ${a.noisy}% of homes sold are at 55 dB or more${noiseMix(g.idx)}</div>` : ""}
     <div class="deciles">${DOM_ROWS.map(([k, label]) => `<span>${label}</span><span class="dbar" title="Decile ${a[k]}">${Array.from({ length: 10 }, (_, d) => `<i style="${d < a[k] ? `background:${DECILE[a[k] - 1]}` : ""}"></i>`).join("")}<b style="margin-left:4px;width:16px;text-align:right">${a[k]}</b></span>`).join("")}</div>
     <div class="note">Deciles: 1 = most deprived 10% in England</div>
+    ${transportHtml(a)}
     ${schoolsHtml(a)}
     <h3 style="font-size:13px;margin:12px 0 0">Sales</h3>
     <div class="salelist" id="salelist"><p class="note">Loading sales…</p></div>`;
@@ -413,9 +790,157 @@ function renderArea() {
   loadAddresses().then(() => {
     if (state.selected !== i) return;
     const rows = g.idx.slice().sort((x, y) => S.d[y] - S.d[x]);
-    $("salelist").innerHTML = rows.length ? `<table><tr><th>Address</th><th>Type</th><th>Date</th><th>Price</th></tr>${rows.map(k => `<tr><td>${window.GM_ADDR[k]}${S.n[k] ? " <span class='note'>(new)</span>" : ""}</td><td>${TYPE_NAMES[S.t[k]]}</td><td style="white-space:nowrap">${fmtDate(S.d[k])}</td><td>${gbp(S.p[k])}</td></tr>`).join("")}</table>` : `<p class="note">No sales match the filters.</p>`;
+    $("salelist").innerHTML = rows.length ? `<table><tr><th>Address</th><th>Type</th><th>Tenure</th><th title="Total floor area from the EPC">Size</th><th title="Habitable rooms (bedrooms + living rooms) from the EPC">Rooms</th><th>EPC</th><th>Built</th><th title="Road traffic noise at the home (Lden, Defra 2021 modelling)">Road noise</th><th>Date</th><th>Price</th><th>£/m²</th></tr>${rows.map(k => `<tr data-k="${k}">
+      <td><a class="addr" href="${mapsUrl(window.GM_ADDR[k])}" target="_blank" rel="noopener" title="Open in Google Maps">${esc(window.GM_ADDR[k])}</a>${svLink(k)}${window.GM_LL && window.GM_LL.lat[k] ? ` <button type="button" class="pin" data-house="${k}" title="Show this house on the map">Map</button>` : ""}${S.n[k] ? " <span class='note'>(new)</span>" : ""}</td><td>${TYPE_NAMES[S.t[k]]}</td><td>${S.l[k] ? "Leasehold" : "Freehold"}</td>
+      <td>${S.f[k] ? S.f[k] + " m²" : "–"}</td><td>${S.r[k] || "–"}</td><td>${epcBadge(S.e[k])}</td>
+      <td>${S.g[k] >= 0 ? bandLabel(S.g[k]) : "–"}</td><td>${noiseChip(S.z[k])}</td>
+      <td>${fmtDate(S.d[k])}</td><td>${gbp(S.p[k])}</td><td>${S.f[k] ? gbpN(S.p[k] / S.f[k]) : "–"}</td></tr>`).join("")}</table>
+      <p class="note">Size, rooms, EPC rating and build period come from the home's Energy Performance Certificate; "–" means no certificate could be matched. Rooms are habitable rooms (bedrooms plus living rooms), not bedrooms. Tenure is from the Land Registry; it doesn't say how many years are left on a lease. Road noise is Defra's modelled road-traffic level for 2021 (Lden: a 24-hour average weighted for evening and night) at the home's 10 m square; 55 dB is the level England reports as significant.${unplaced(rows)}</p>` : `<p class="note">No sales match the filters.</p>`;
+    renderHouses(rows);
   }).catch(() => { $("salelist").innerHTML = `<p class="note">Couldn't load addresses.js.</p>`; });
 }
+
+// ---------- houses sold in the selected area (exact position from OS Open UPRN)
+// One icon per location; flats in the same building share a location, so the icon shows a count.
+const houseLayer = L.layerGroup().addTo(map);
+const houseIcon = (n, on) => L.divIcon({ className: "house-icon" + (on ? " on" : ""), iconSize: [22, 22], iconAnchor: [11, 21], popupAnchor: [0, -20],
+  html: `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 1.8 11.2h3v10.3h5.4v-6.3h3.6v6.3h5.4V11.2h3z" fill="#eb6834" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>${n > 1 ? `<span class="cnt">${n}</span>` : ""}` });
+const houseByKey = new Map(); // sale index -> marker
+function llOf(k) { const ll = window.GM_LL; return ll && ll.lat[k] ? [ll.lat[k] / 1e5, ll.lon[k] / 1e5] : null; }
+function unplaced(rows) { const n = rows.filter(k => !llOf(k)).length; return n ? ` ${n} of these sale${n === 1 ? "" : "s"} couldn't be placed on the map (no matching EPC).` : ""; }
+// Everything known about each sale at this spot (one card per sale; flats in a building share a spot).
+function saleCard(k, withName) {
+  const fact = (label, v) => v ? `<span class="hp-k">${label}</span><span>${v}</span>` : "";
+  return `<div class="hp-sale">
+    ${withName ? `<div class="hp-name">${esc(window.GM_ADDR[k].split(",")[0])}</div>` : ""}
+    <div class="hp-top"><b>${gbp(S.p[k])}</b><span>${fmtDate(S.d[k])}</span></div>
+    <div class="note">${[TYPE_NAMES[S.t[k]], S.l[k] ? "Leasehold" : "Freehold", S.n[k] ? "New build" : ""].filter(Boolean).join(" · ")}</div>
+    <div class="hp-grid">
+      ${fact("Floor area", S.f[k] ? S.f[k] + " m²" : "")}
+      ${fact("Price per m²", S.f[k] ? gbpN(S.p[k] / S.f[k]) : "")}
+      ${fact("Rooms", S.r[k] ? `${S.r[k]} <span class="note">(habitable)</span>` : "")}
+      ${fact("EPC rating", S.e[k] >= 0 ? epcBadge(S.e[k]) : "")}
+      ${fact("Built", S.g[k] >= 0 ? bandLabel(S.g[k]) : "")}
+      ${fact("Road noise", S.z[k] >= 0 ? noiseChip(S.z[k]) : "")}
+    </div>
+    ${!S.f[k] ? `<div class="note">No Energy Performance Certificate matched, so size, rooms and rating are unknown.</div>` : ""}
+  </div>`;
+}
+// ---- a home's full Land Registry history (1995 onwards)
+const histOf = k => { const H = window.GM_HIST; return H && H.sale[k] >= 0 ? H.homes[H.sale[k]] : null; };
+const ymd = d => new Date(Date.UTC(Math.floor(d / 10000), Math.floor(d / 100) % 100 - 1, d % 100));
+const fmtYmd = d => ymd(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+const HTYPE = { D: "Detached", S: "Semi-detached", T: "Terraced", F: "Flat", O: "Other" };
+function historySpark(h) {
+  if (h.length < 2) return "";
+  const W = 240, H = 46, pad = 4, t0 = ymd(h[0][0]).getTime(), t1 = ymd(h[h.length - 1][0]).getTime();
+  const ps = h.map(r => r[1]), lo = Math.min(...ps), hi = Math.max(...ps);
+  const X = d => pad + (W - 2 * pad) * ((ymd(d).getTime() - t0) / Math.max(1, t1 - t0));
+  const Y = v => H - pad - (H - 2 * pad) * ((v - lo) / Math.max(1, hi - lo));
+  const pts = h.map(r => `${X(r[0]).toFixed(1)},${Y(r[1]).toFixed(1)}`).join(" ");
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="Sale prices over time">
+    <polyline points="${pts}" fill="none" stroke="${css("--accent")}" stroke-width="2" stroke-linejoin="round"/>
+    ${h.map(r => `<circle cx="${X(r[0]).toFixed(1)}" cy="${Y(r[1]).toFixed(1)}" r="3" fill="${css("--surface")}" stroke="${css("--accent")}" stroke-width="2"/>`).join("")}
+  </svg>`;
+}
+function historyHtml(k) {
+  const h = histOf(k); if (!h) return "";
+  const rows = h.map((r, i) => {
+    const prev = i ? h[i - 1] : null;
+    const ch = prev ? (r[1] - prev[1]) / prev[1] * 100 : null;
+    const yrs = prev ? (ymd(r[0]) - ymd(prev[0])) / 3.15576e10 : 0;
+    const flags = [r[4] ? "new build" : "", r[5] ? "other sale type" : "", prev && prev[2] !== r[2] ? HTYPE[r[2]] : ""].filter(Boolean).join(", ");
+    return `<tr><td>${fmtYmd(r[0])}</td><td><b>${gbp(r[1])}</b></td>
+      <td class="note">${ch == null ? "" : `${ch >= 0 ? "+" : ""}${ch.toFixed(0)}%${yrs >= 1 ? ` in ${yrs.toFixed(0)} yr${yrs >= 1.5 ? "s" : ""}` : ""}`}${flags ? ` · ${flags}` : ""}</td></tr>`;
+  }).reverse().join("");
+  const first = h[0], last = h[h.length - 1];
+  const total = (last[1] - first[1]) / first[1] * 100, span = (ymd(last[0]) - ymd(first[0])) / 3.15576e10;
+  const cagr = span >= 1 ? (Math.pow(last[1] / first[1], 1 / span) - 1) * 100 : null;
+  return `<div class="hp-hist"><div class="hp-k" style="margin-bottom:2px">Price history (Land Registry, ${h.length} sales)</div>
+    ${historySpark(h)}
+    <table>${rows}</table>
+    <div class="note">${total >= 0 ? "+" : ""}${total.toFixed(0)}% from ${gbp(first[1])} in ${ymd(first[0]).getUTCFullYear()}${cagr != null ? ` (about ${cagr.toFixed(1)}% a year)` : ""}. Not adjusted for inflation or improvements.</div></div>`;
+}
+function priceChange(ks) {
+  const o = ks.slice().sort((a, b) => S.d[a] - S.d[b]), first = S.p[o[0]], last = S.p[o[o.length - 1]];
+  const pct = (last - first) / first * 100;
+  return ` · ${pct >= 0 ? "+" : ""}${pct.toFixed(1)}% between first and latest sale`;
+}
+const newest = ks => ks.reduce((a, b) => S.d[b] > S.d[a] ? b : a);
+function housePopup(ks) {
+  const addr = window.GM_ADDR[ks[0]];
+  const sameHome = ks.every(k => window.GM_ADDR[k] === addr); // one home sold more than once
+  const building = ks.length > 1 && !sameHome;                  // several flats at one spot
+  const change = sameHome && ks.length > 1 ? priceChange(ks) : "";
+  return `<div class="house-pop"><b>${esc(building ? addr.replace(/^(Flat|Apartment|Unit)\s+\S+,?\s*/i, "") : addr)}</b>
+    ${building ? `<div class="note">${ks.length} sales at this building (newest first)</div>` : ""}
+    ${sameHome && ks.length > 1 && !histOf(ks[0]) ? `<div class="note">Sold ${ks.length} times since ${fmtDate(0).slice(-4)}${change}</div>` : ""}
+    <div class="hp-list">${sameHome
+      ? saleCard(newest(ks), false) + (histOf(newest(ks)) ? historyHtml(newest(ks)) : "")
+      : ks.slice().sort((a, b) => S.d[b] - S.d[a]).map(k => saleCard(k, building)
+          + (histOf(k) ? (building ? `<details class="hp-more"><summary>Price history (${histOf(k).length} sales)</summary>${historyHtml(k)}</details>` : historyHtml(k)) : "")).join("")}</div>
+    <div style="margin-top:6px"><a href="${mapsUrl(addr)}" target="_blank" rel="noopener">Google Maps ↗</a>${svLink(ks[0])}</div></div>`;
+}
+function clearHouses() {
+  houseLayer.eachLayer(m => m.closePopup()); // close first, so no icon is redrawn mid-removal
+  houseLayer.clearLayers(); houseByKey.clear();
+}
+function renderHouses(rows) {
+  clearHouses();
+  const groups = new Map();
+  for (const k of rows) { const ll = llOf(k); if (!ll) continue; const key = ll.join(); (groups.get(key) || groups.set(key, []).get(key)).push(k); }
+  for (const ks of groups.values()) {
+    const m = L.marker(llOf(ks[0]), { icon: houseIcon(ks.length), keyboard: true, title: window.GM_ADDR[ks[0]], riseOnHover: true });
+    m.bindTooltip(ks.length > 1 ? `<b>${ks.length} sales</b> · ${esc(window.GM_ADDR[ks[0]].split(",").slice(-2).join(",").trim())}`
+      : `<b>${gbp(S.p[ks[0]])}</b> · ${esc(window.GM_ADDR[ks[0]])}`, { direction: "top", offset: [0, -18] });
+    m.bindPopup(() => housePopup(ks), { maxWidth: 300, minWidth: 240 });
+    // highlight the matching rows in the sales table
+    m.on("popupopen", () => { m.setIcon(houseIcon(ks.length, true)); highlightRows(ks); });
+    // (skip the redraw when the marker is being removed, or Leaflet re-adds an orphan icon)
+    m.on("popupclose", () => { if (map.hasLayer(m)) m.setIcon(houseIcon(ks.length)); highlightRows([]); });
+    ks.forEach(k => houseByKey.set(k, m));
+    houseLayer.addLayer(m);
+  }
+}
+function highlightRows(ks) {
+  const box = $("salelist"); if (!box) return;
+  box.querySelectorAll("tr.hl").forEach(r => r.classList.remove("hl"));
+  const rows = ks.map(k => box.querySelector(`tr[data-k="${k}"]`)).filter(Boolean);
+  rows.forEach(r => r.classList.add("hl"));
+  if (rows[0]) box.scrollTop = rows[0].offsetTop - box.clientHeight / 3; // scroll inside the list only
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-house]"); if (!b) return;
+  const m = houseByKey.get(+b.dataset.house); if (!m) return;
+  $("map").scrollIntoView({ behavior: "smooth", block: "center" });
+  map.setView(m.getLatLng(), Math.max(map.getZoom(), 17));
+  m.openPopup();
+});
+
+// ---------- map icons: white glyphs on a coloured badge (24 x 24 viewBox)
+const GLYPH = {
+  // state school: building with a flag
+  school: c => `<path d="M12 1.5v4" stroke="#fff" stroke-width="1.4"/><path d="M12.7 1.5h4.3l-1.2 1.3 1.2 1.3h-4.3z" fill="#fff"/>
+    <path d="M12 6 3.5 11v10h6v-5h5v5h6V11z" fill="#fff"/><rect x="10.6" y="10" width="2.8" height="2.8" rx=".6" fill="${c}"/>`,
+  // private school: graduation cap
+  cap: () => `<path d="M12 4 1.5 9 12 14l8.5-4v5.5h1.8V9z" fill="#fff"/><path d="M5.5 12v4.3c0 1.8 2.9 3.2 6.5 3.2s6.5-1.4 6.5-3.2V12L12 15z" fill="#fff"/>`,
+  // train: front view on rails
+  train: c => `<path d="M7.5 2h9A3.5 3.5 0 0 1 20 5.5v9.5a3 3 0 0 1-3 3l2 4h-2.3l-2-4H9.3l-2 4H5l2-4a3 3 0 0 1-3-3V5.5A3.5 3.5 0 0 1 7.5 2z" fill="#fff"/>
+    <rect x="6.6" y="5" width="10.8" height="5.2" rx="1.2" fill="${c}"/><circle cx="8.4" cy="14.3" r="1.4" fill="${c}"/><circle cx="15.6" cy="14.3" r="1.4" fill="${c}"/>`,
+  // tram: body with pantograph on the roof
+  tram: c => `<path d="M8 2.5h8M9 7l3-4.2L15 7" stroke="#fff" stroke-width="1.6" fill="none" stroke-linejoin="round"/>
+    <path d="M6.5 7h11A2.5 2.5 0 0 1 20 9.5V18a2.5 2.5 0 0 1-2 2.4l1.5 2.1h-2.2l-1.5-2h-7.6l-1.5 2H4.5L6 20.4A2.5 2.5 0 0 1 4 18V9.5A2.5 2.5 0 0 1 6.5 7z" fill="#fff"/>
+    <rect x="6.4" y="9.4" width="11.2" height="5" rx="1" fill="${c}"/><circle cx="8.3" cy="17.4" r="1.2" fill="${c}"/><circle cx="15.7" cy="17.4" r="1.2" fill="${c}"/>`,
+  // bus: front view
+  bus: c => `<path d="M6.5 2.5h11A2.5 2.5 0 0 1 20 5v13a1.5 1.5 0 0 1-1 1.4V21.5h-3V20H8v1.5H5v-2.1A1.5 1.5 0 0 1 4 18V5a2.5 2.5 0 0 1 2.5-2.5z" fill="#fff"/>
+    <rect x="6" y="5.5" width="12" height="6.5" rx="1" fill="${c}"/><circle cx="7.6" cy="16" r="1.3" fill="${c}"/><circle cx="16.4" cy="16" r="1.3" fill="${c}"/>`,
+};
+const glyphSvg = (g, c) => `<svg viewBox="0 0 24 24" aria-hidden="true">${GLYPH[g](c)}</svg>`;
+function badgeIcon(g, color, size, round) {
+  return L.divIcon({ className: "pic", iconSize: [size, size], iconAnchor: [size / 2, size / 2],
+    html: `<span style="background:${color};border-radius:${round ? "50%" : Math.round(size / 4) + "px"}">${glyphSvg(g, color)}</span>` });
+}
+const legendIcon = (g, color, round) => `<span class="lg-ic" style="background:${color};${round ? "border-radius:50%" : ""}">${glyphSvg(g, color)}</span>`;
 
 // ---------- schools
 const SC = window.GM_SCHOOLS || [];
@@ -427,45 +952,84 @@ const GRADE = [ // shared colour category across Ofsted's old and report-card sc
   { label: "Requires improvement · Needs attention", color: "#ec835a" },
   { label: "Inadequate · Urgent improvement", color: "#d03b3b" },
 ];
-const PHASE = { P: "Primary", S: "Secondary" };
-const ofstedUrl = s => `https://reports.ofsted.gov.uk/provider/21/${s.urn}`;
+const PHASE = { P: "Primary", S: "Secondary", PS: "Primary & secondary" };
+const ofstedUrl = s => s.link || `https://reports.ofsted.gov.uk/provider/21/${s.urn}`;
+const giasUrl = s => `https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/${s.urn}`;
+const webUrl = w => /^https?:\/\//i.test(w) ? w : "https://" + w;
 const fmtISO = d => d ? new Date(d).toLocaleDateString("en-GB", { month: "short", year: "numeric" }) : "";
 const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const gradeHtml = s => `<span class="grade"><i style="background:${GRADE[s.cat].color}"></i>${esc(s.head || "Not yet inspected")}</span>`;
+const gradeHtml = s => `<span class="grade"><i style="background:${GRADE[s.cat].color};${s.sector === "Private" ? "border-radius:2px" : ""}"></i>${esc(s.head || "Not yet inspected")}</span>`;
 const km = m => m < 1000 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000).toFixed(1)} km`;
+const sectorTag = s => `<span class="tag">${s.sector === "Private" ? "Private" : "State"}</span>`;
 map.createPane("schools").style.zIndex = 450;
 const schoolLayer = L.layerGroup().addTo(map);
-const schoolMarkers = SC.map((s, j) => {
-  const m = L.circleMarker([s.lat, s.lon], { pane: "schools", radius: s.phase === "S" ? 7 : 5, weight: s.phase === "S" ? 2.5 : 1.5,
-    color: "#ffffff", fillColor: GRADE[s.cat].color, fillOpacity: 1 });
-  m.bindTooltip(() => `<b>${esc(s.name)}</b><div class="note">${PHASE[s.phase]} · ${esc(s.type)}</div>${gradeHtml(s)}${s.date ? ` <span class="note">(${fmtISO(s.date)})</span>` : ""}`, { direction: "top", offset: [0, -6] });
+// State schools: school building; private schools: graduation cap. Badge colour = Ofsted grade;
+// secondary and all-through schools are drawn larger.
+const schoolMarkers = SC.map(s => {
+  const size = s.phase === "P" ? 18 : 22;
+  const m = L.marker([s.lat, s.lon], { pane: "schools", icon: badgeIcon(s.sector === "Private" ? "cap" : "school", GRADE[s.cat].color, size), keyboard: false });
+  m.bindTooltip(() => `<b>${esc(s.name)}</b>${sectorTag(s)}<div class="note">${PHASE[s.phase]}${s.ages ? ` · ages ${s.ages}` : ""} · ${esc(s.type)}</div>${gradeHtml(s)}${s.date ? ` <span class="note">(${fmtISO(s.date)})</span>` : ""}`, { direction: "top", offset: [0, -size / 2] });
   m.bindPopup(() => schoolPopup(s));
   return m;
 });
+const pupilCount = s => (s.census && s.census.pupils) || s.pupils;
+// Pupil numbers and make-up from the January 2026 school census (state schools; private schools report totals only)
+function pupilsHtml(s) {
+  const c = s.census || {}, n = pupilCount(s);
+  if (!n) return "";
+  const pct = v => v == null ? null : (v < 10 ? v.toFixed(1) : Math.round(v)) + "%";
+  const facts = [`<b>${n.toLocaleString("en-GB")}</b> pupils${s.capacity ? ` (capacity ${s.capacity.toLocaleString("en-GB")})` : ""}`,
+    c.fsm != null && `free school meals ${pct(c.fsm)}`, c.eal != null && `first language not English ${pct(c.eal)}`].filter(Boolean).join(" · ");
+  let eth = "";
+  if (c.eth && c.eth.length) {
+    const top = c.eth.slice(0, 6), rest = c.eth.slice(6).reduce((t, x) => t + x[1], 0);
+    const rows = top.concat(rest >= 0.5 ? [["Other groups", rest]] : []);
+    eth = `<div class="note" style="margin-top:6px">Ethnic groups of pupils (school census, Jan 2026)</div>
+      <div class="eth">${rows.map(([g, v]) => `<span>${esc(g)}</span><span class="bar"><b style="width:${Math.min(100, v)}%"></b></span><span>${pct(v)}</span>`).join("")}</div>`;
+  }
+  return `<div style="margin-top:6px;font-size:12px">${facts}</div>${eth}`;
+}
 function schoolPopup(s) {
-  return `<b>${esc(s.name)}</b><div class="note">${PHASE[s.phase]} · ${esc(s.type)}${s.pupils ? ` · ${s.pupils.toLocaleString("en-GB")} pupils` : ""}${s.faith ? ` · ${esc(s.faith)}` : ""}</div>
+  const facts = [PHASE[s.phase], s.ages && `ages ${s.ages}`, s.gender && `${s.gender} only`, s.faith].filter(Boolean).map(esc).join(" · ");
+  const links = [
+    s.scheme ? `<a href="${esc(ofstedUrl(s))}" target="_blank" rel="noopener">Ofsted reports ↗</a>` : "",
+    s.insp === "ISI" ? `<a href="https://www.isi.net/" target="_blank" rel="noopener">ISI reports ↗</a>` : "",
+    s.web ? `<a href="${esc(webUrl(s.web))}" target="_blank" rel="noopener">School website ↗</a>` : "",
+    `<a href="${giasUrl(s)}" target="_blank" rel="noopener">DfE record ↗</a>`,
+  ].filter(Boolean).join(" · ");
+  return `<b>${esc(s.name)}</b>${sectorTag(s)}<div class="note">${esc(s.type)}</div><div class="note">${facts}</div>
     <div style="margin:6px 0">${gradeHtml(s)}</div>
-    <div class="note">${s.scheme ? `${esc(s.scheme)}, ${fmtISO(s.date)}` : "No inspection on record"}</div>
+    <div class="note">${s.scheme ? `${esc(s.scheme)}, ${fmtISO(s.date)}` : s.insp === "ISI" ? "Inspected by the Independent Schools Inspectorate, which doesn't publish grades" : "No inspection on record"}</div>
     ${s.grades.length ? `<table>${s.grades.map(([k, v]) => `<tr><td>${esc(k)}</td><td><b>${esc(v)}</b></td></tr>`).join("")}</table>` : ""}
     ${s.later ? `<div class="note">Later ungraded visit (${fmtISO(s.later[0])}): ${esc(s.later[1])}</div>` : ""}
-    <div style="margin-top:6px"><a href="${ofstedUrl(s)}" target="_blank" rel="noopener">Ofsted reports ↗</a></div>`;
+    ${pupilsHtml(s)}
+    <div style="margin-top:6px">${links}</div>`;
+}
+// Schools filter: within "Level" and within "Funding", nothing ticked means all; nothing ticked at all hides schools.
+function schoolVisible(s) {
+  const v = state.schools, lv = v.filter(x => x === "P" || x === "S"), fu = v.filter(x => x.length > 1);
+  return (!lv.length || lv.some(x => s.phase.includes(x))) && (!fu.length || fu.includes(s.sector));
 }
 function renderSchools() {
   schoolLayer.clearLayers();
-  $("slegend").hidden = !state.schools;
-  if (!state.schools) return;
-  SC.forEach((s, j) => { if (state.schools.includes(s.phase)) schoolLayer.addLayer(schoolMarkers[j]); });
-  $("slegend").innerHTML = `<b>Schools:</b>` + GRADE.slice(1).concat(GRADE[0]).map(g => `<span class="grade"><i style="background:${g.color}"></i>${g.label}</span>`).join("")
-    + `<span>Small dot = primary, large = secondary</span>`;
+  $("slegend").hidden = !state.schools.length;
+  if (!state.schools.length) return;
+  SC.forEach((s, j) => { if (schoolVisible(s)) schoolLayer.addLayer(schoolMarkers[j]); });
+  $("slegend").innerHTML = `<b>Schools:</b><span>${legendIcon("school", "#52514e")} state</span><span>${legendIcon("cap", "#52514e")} private</span><span>larger = secondary or all-through</span>
+    <span style="flex-basis:100%;height:0"></span><b>Colour = Ofsted grade:</b>`
+    + GRADE.slice(1).concat(GRADE[0]).map(g => `<span class="grade"><i style="background:${g.color}"></i>${g.label}</span>`).join("");
 }
 function schoolsHtml(a) {
   if (!a.sch || !a.sch.length) return "";
-  const block = ph => a.sch.filter(([j]) => SC[j].phase === ph).map(([j, d]) => { const s = SC[j];
-    return `<div class="sch-row"><a href="#" data-school="${j}">${esc(s.name)}</a><span class="note">${km(d)}</span>
-      <span>${gradeHtml(s)}</span><span class="note">${fmtISO(s.date)}</span></div>`; }).join("");
+  const row = ([j, d]) => { const s = SC[j];
+    return `<div class="sch-row"><span><a href="#" data-school="${j}">${esc(s.name)}</a>${s.sector === "Private" ? ` <span class="note">${PHASE[s.phase]}${s.ages ? `, ${s.ages}` : ""}</span>` : ""}${pupilCount(s) ? ` <span class="note">· ${pupilCount(s).toLocaleString("en-GB")} pupils</span>` : ""}</span><span class="note">${km(d)}</span>
+      <span>${gradeHtml(s)}</span><span class="note">${fmtISO(s.date)}</span></div>`; };
+  const pick = f => a.sch.filter(([j]) => f(SC[j])).map(row).join("") || `<p class="note">None nearby.</p>`;
   return `<div class="sch"><h3 style="font-size:13px;margin:12px 0 0">Nearest schools</h3>
     <div class="note">Straight-line distance from the area's centre. Not official catchment areas: check the council's admissions criteria.</div>
-    <h3>Primary</h3>${block("P")}<h3>Secondary</h3>${block("S")}</div>`;
+    <h3>State primary</h3>${pick(s => s.sector === "State" && s.phase === "P")}
+    <h3>State secondary</h3>${pick(s => s.sector === "State" && s.phase === "S")}
+    <h3>Private (independent)</h3>${pick(s => s.sector === "Private")}</div>`;
 }
 document.addEventListener("click", e => {
   const t = e.target.closest("[data-school]"); if (!t) return;
@@ -474,22 +1038,108 @@ document.addEventListener("click", e => {
   map.setView([s.lat, s.lon], Math.max(map.getZoom(), 14)); m.openPopup();
 });
 
+// ---------- public transport
+const ST = window.GM_STOPS || { m: [], name: [], lat: [], lon: [] };
+const MODE = { r: { label: "Train station", glyph: "train", color: "#6250d6" }, t: { label: "Tram stop", glyph: "tram", color: "#c98500" },
+  b: { label: "Bus stop", glyph: "bus", color: "#3f3e3b" } };
+const BUS_MIN_ZOOM = 13; // 20,000 bus stops: only drawn when zoomed in, and only the ones in view
+map.createPane("stops").style.zIndex = 440;
+const stopLayers = { r: L.layerGroup(), t: L.layerGroup(), b: L.layerGroup() };
+const stopSize = (m, z) => m === "b" ? (z >= 16 ? 21 : 18) : z < 11 ? 14 : z < 13 ? 18 : 22;
+function makeStop(j) {
+  const m = ST.m[j], M = MODE[m], z = map.getZoom();
+  const mk = L.marker([ST.lat[j], ST.lon[j]], { pane: "stops", icon: badgeIcon(M.glyph, M.color, stopSize(m, z), m === "b"), keyboard: false });
+  mk.bindTooltip(`<b>${esc(ST.name[j])}</b><div class="note">${M.label}</div>`, { direction: "top", offset: [0, -8] });
+  return mk;
+}
+// Train and tram stops (about 400) are always in their layers; bus stops are added for the visible area only.
+ST.m.forEach((m, j) => { if (m !== "b") stopLayers[m].addLayer(makeStop(j)); });
+const busMarkers = new Map();
+function refreshBusStops() {
+  if (!map.hasLayer(stopLayers.b)) return;
+  const b = map.getBounds().pad(0.2), keep = new Set();
+  ST.m.forEach((m, j) => {
+    if (m !== "b" || !b.contains([ST.lat[j], ST.lon[j]])) return;
+    keep.add(j);
+    if (!busMarkers.has(j)) { const mk = makeStop(j); busMarkers.set(j, mk); stopLayers.b.addLayer(mk); }
+  });
+  for (const [j, mk] of busMarkers) if (!keep.has(j)) { stopLayers.b.removeLayer(mk); busMarkers.delete(j); }
+}
+map.on("moveend", refreshBusStops);
+const noiseOverlay = L.tileLayer.wms("https://environment.data.gov.uk/geoservices/datasets/562c9d56-7c2d-4d42-83bb-578d6e97a517/wms", {
+  layers: "Road_Noise_Lden_England_Round_4_All", format: "image/png", transparent: true, opacity: 0.75, version: "1.3.0",
+  attribution: "Road noise © Defra (Round 4, 2021)", pane: "noise", maxZoom: 18 });
+map.createPane("noise").style.zIndex = 420; // above neighbourhood colours, below stops and schools
+map.getPane("noise").style.pointerEvents = "none";
+function renderNoise() {
+  const on = !!state.noise;
+  if (on && !map.hasLayer(noiseOverlay)) noiseOverlay.addTo(map);
+  if (!on && map.hasLayer(noiseOverlay)) map.removeLayer(noiseOverlay);
+  $("nlegend").hidden = !on;
+  $("nlegend").innerHTML = `<b>Road noise (Lden):</b>` + D.noiseBands.map((b, k) =>
+    `<span class="noise"><i style="background:${D.noiseColors[k]}"></i>${noiseLabel(k)}</span>`).join("")
+    + `<span>55 dB+ is the level England reports as significant</span>`;
+}
+function renderStops() {
+  for (const m of ["r", "t", "b"]) {
+    const want = state.transport.includes(m) && (m !== "b" || map.getZoom() >= BUS_MIN_ZOOM);
+    if (want && !map.hasLayer(stopLayers[m])) stopLayers[m].addTo(map);
+    if (!want && map.hasLayer(stopLayers[m])) { map.removeLayer(stopLayers[m]); if (m === "b") { stopLayers.b.clearLayers(); busMarkers.clear(); } }
+  }
+  refreshBusStops();
+  const tl = $("tlegend");
+  tl.hidden = !state.transport.length;
+  tl.innerHTML = `<b>Transport:</b>` + state.transport.map(m => `<span class="grade">${legendIcon(MODE[m].glyph, MODE[m].color, m === "b")} ${MODE[m].label}s</span>`).join("")
+    + (state.transport.includes("b") && map.getZoom() < BUS_MIN_ZOOM ? `<span>Zoom in to see bus stops</span>` : "");
+}
+// Station icons shrink when zoomed out so they don't hide the map.
+let stopTier = null;
+function sizeStops() {
+  const z = map.getZoom(), tier = stopSize("r", z) + "/" + stopSize("b", z);
+  if (tier === stopTier) return;
+  stopTier = tier;
+  for (const m of ["r", "t", "b"]) stopLayers[m].eachLayer(mk => mk.setIcon(badgeIcon(MODE[m].glyph, MODE[m].color, stopSize(m, z), m === "b")));
+}
+map.on("zoomend", () => { sizeStops(); renderStops(); });
+sizeStops();
+const nearestStation = a => {
+  const [rj, rd] = a.tr.r, [tj, td] = a.tr.t;
+  return rd <= td ? { name: ST.name[rj] + " (train)", d: rd } : { name: ST.name[tj] + " (tram)", d: td };
+};
+function transportHtml(a) {
+  if (!a.tr) return "";
+  const row = ([j, d], label) => `<div class="sch-row"><span><a href="#" data-stop="${j}">${esc(ST.name[j])}</a> <span class="note">${label}</span></span><span class="note">${km(d)}</span></div>`;
+  return `<div class="sch"><h3 style="font-size:13px;margin:12px 0 0">Public transport</h3>
+    <div class="note">Straight-line distance from the area's centre.</div>
+    ${row(a.tr.r, "train station")}
+    ${a.tr.t[1] <= 15000 ? row(a.tr.t, "Metrolink tram stop") : ""}
+    <div class="sch-row"><span>Bus stops within 400 m <span class="note">(~5 min walk)</span></span><span><b>${a.tr.b400}</b></span></div></div>`;
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-stop]"); if (!t) return;
+  e.preventDefault(); const j = +t.dataset.stop, m = ST.m[j];
+  if (!state.transport.includes(m)) F.transport.set(state.transport.concat(m));
+  map.setView([ST.lat[j], ST.lon[j]], Math.max(map.getZoom(), 14));
+});
+
 // ---------- render
 let lastLad = null;
 function render() {
   if (state.selected != null && !inScope(A[state.selected])) state.selected = null;
   agg = aggregate();
-  const meds = agg.map(g => g.median).filter(m => m != null).sort((a, b) => a - b);
-  // 7 quantile bands, rounded to £5k and kept strictly increasing so no band repeats.
+  const V = VALUE[state.metric] || VALUE.price, step = V.round;
+  const meds = agg.map((g, i) => inScope(A[i]) ? V.get(g, A[i]) : null).filter(m => m != null).sort((a, b) => a - b);
+  // 7 quantile bands, rounded and kept strictly increasing so no band repeats.
   breaks = [];
   for (let k = 1; k <= 6; k++) {
-    let v = Math.round((meds[Math.floor((meds.length * k) / 7)] || 0) / 5000) * 5000;
-    if (breaks.length && v <= breaks[breaks.length - 1]) v = breaks[breaks.length - 1] + 5000;
+    let v = Math.round((meds[Math.floor((meds.length * k) / 7)] || 0) / step) * step;
+    if (breaks.length && v <= breaks[breaks.length - 1]) v = breaks[breaks.length - 1] + step;
     breaks.push(v);
   }
   geoLayer.eachLayer(styleLayer);
-  if (state.lad !== lastLad) { lastLad = state.lad; fitScope(); }
-  renderLegend(); renderSchools(); renderTiles(); renderBars(); renderScatter(); renderArea();
+  const ladKey = state.lad.slice().sort().join("|");
+  if (ladKey !== lastLad) { lastLad = ladKey; fitScope(); }
+  renderLegend(); renderSchools(); renderStops(); renderNoise(); renderTiles(); renderBars(); renderScatter(); renderArea();
 }
 render();
 })();
